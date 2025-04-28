@@ -1,0 +1,5 @@
+# 서비스 요청 부분
+bool connect
+---
+# 서비스 응답 부분
+bool is_power_on

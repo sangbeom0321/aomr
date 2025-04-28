@@ -1,0 +1,6 @@
+[submodule "localization/LIO-SAM-ROS2-REFACTORING"]
+	path = localization/LIO-SAM-ROS2-REFACTORING
+	url = https://github.com/sunbei00/LIO-SAM-ROS2-REFACTORING.git
+[submodule "localization/LIO-SAM-LOC-ROS2-REFACTORING"]
+	path = localization/LIO-SAM-LOC-ROS2-REFACTORING
+	url = https://github.com/sunbei00/LIO-SAM-LOC-ROS2-REFACTORING.git

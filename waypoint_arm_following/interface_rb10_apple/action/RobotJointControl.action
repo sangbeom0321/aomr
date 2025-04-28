@@ -1,0 +1,17 @@
+# 요청 메시지
+# 모드를 설정할 값
+float64 j0
+float64 j1
+float64 j2
+float64 j3
+float64 j4
+float64 j5
+---
+# 결과 메시지
+# 작업 완료 여부
+bool success
+string message
+---
+# 피드백 메시지
+# 현재 진행 상황
+string feedback

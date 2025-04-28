@@ -1,0 +1,11 @@
+# Goal
+string command  # "start_tracking" 명령어
+
+---
+# Result
+bool success
+string message
+
+---
+# Feedback
+string feedback

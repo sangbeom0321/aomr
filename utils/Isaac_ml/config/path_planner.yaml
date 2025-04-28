@@ -1,0 +1,15 @@
+topology_path_planner:
+  ros__parameters:
+    map_yaml_path: "/root/ros2_ws/src/Isaac_ml/map/map_data.yaml"
+    vertex_yaml_path: "/root/ros2_ws/src/Isaac_ml/map/map_vertex.yaml"
+    flip_x: true
+    flip_y: false
+    inflation_radius: 2.0
+    max_search_area: 10000
+    path_resolution: 0.05
+    min_points_for_spline: 4
+    points_per_segment: 10
+    map_topic: "topology_map"
+    path_topic: "plan"
+    odom_topic: "/odometry/imu"
+    goal_topic: "/goal_pose"

@@ -1,0 +1,586 @@
+[Info] [carb] Logging to file: /isaac-sim/kit/logs/Kit/Isaac-Sim/4.2/kit_20250113_115602.log
+2025-01-13 11:56:02 [0ms] [Warning] [omni.kit.app.plugin] No crash reporter present, dumps uploading isn't available.
+[0.136s] [ext: omni.blobkey-1.1.2] startup
+[0.136s] [ext: omni.kit.async_engine-0.0.1] startup
+[1.127s] [ext: omni.stats-1.0.1] startup
+[1.129s] [ext: omni.datastore-0.0.0] startup
+[1.139s] [ext: omni.client-1.2.0] startup
+[1.189s] [ext: omni.ujitso.default-1.0.0] startup
+[1.190s] [ext: omni.gpu_foundation.shadercache.vulkan-1.0.0] startup
+[1.198s] [ext: omni.hsscclient-1.1.1] startup
+[1.199s] [ext: omni.assets.plugins-0.0.0] startup
+[1.201s] [ext: omni.gpu_foundation-0.0.0] startup
+[1.215s] [ext: carb.windowing.plugins-1.0.0] startup
+2025-01-13 11:56:03 [1,146ms] [Warning] [carb.windowing-glfw.plugin] GLFW initialization failed.
+2025-01-13 11:56:03 [1,146ms] [Warning] [carb] Failed to startup plugin carb.windowing-glfw.plugin (interfaces: [carb::windowing::IGLContext v1.0],[carb::windowing::IWindowing v1.4]) (impl: carb.windowing-glfw.plugin)
+[1.216s] [ext: omni.kit.renderer.init-0.0.0] startup
+2025-01-13 11:56:03 [1,177ms] [Warning] [omni.platforminfo.plugin] failed to open the default display.  Can't verify X Server version.
+2025-01-13 11:56:03 [1,306ms] [Warning] [carb.windowing-glfw.plugin] GLFW initialization failed.
+2025-01-13 11:56:03 [1,306ms] [Warning] [carb] Failed to startup plugin carb.windowing-glfw.plugin (interfaces: [carb::windowing::IGLContext v1.0],[carb::windowing::IWindowing v1.4]) (impl: carb.windowing-glfw.plugin)
+
+|---------------------------------------------------------------------------------------------|
+| Driver Version: 535.216.03    | Graphics API: Vulkan
+|=============================================================================================|
+| GPU | Name                             | Active | LDA | GPU Memory | Vendor-ID | LUID       |
+|     |                                  |        |     |            | Device-ID | UUID       |
+|     |                                  |        |     |            | Bus-ID    |            |
+|---------------------------------------------------------------------------------------------|
+| 0   | NVIDIA GeForce RTX 3090          | Yes: 0 |     | 24822   MB | 10de      | 0          |
+|     |                                  |        |     |            | 2204      | 902ad821.. |
+|     |                                  |        |     |            | 86        |            |
+|---------------------------------------------------------------------------------------------|
+| 1   | NVIDIA GeForce RTX 3090          | Yes: 1 |     | 24822   MB | 10de      | 0          |
+|     |                                  |        |     |            | 2204      | 34d13a10.. |
+|     |                                  |        |     |            | af        |            |
+|=============================================================================================|
+| OS: 22.04.3 LTS (Jammy Jellyfish) ubuntu, Version: 22.04.3, Kernel: 6.8.0-50-generic
+| Processor: Intel(R) Xeon(R) Silver 4110 CPU @ 2.10GHz | Cores: 16 | Logical: 16
+|---------------------------------------------------------------------------------------------|
+| Total Memory (MB): 386453 | Free Memory: 367491
+| Total Page/Swap (MB): 124998 | Free Page/Swap: 124998
+|---------------------------------------------------------------------------------------------|
+2025-01-13 11:56:05 [2,373ms] [Warning] [gpu.foundation.plugin] IOMMU is enabled.
+[3.233s] [ext: omni.kit.pipapi-0.0.0] startup
+[3.236s] [ext: omni.kit.pip_archive-0.0.0] startup
+[3.236s] [ext: omni.pip.compute-1.4.0] startup
+[3.237s] [ext: omni.pip.cloud-1.1.3] startup
+[3.243s] [ext: omni.isaac.core_archive-2.3.0] startup
+[3.243s] [ext: omni.materialx.libs-1.0.4] startup
+[3.257s] [ext: omni.isaac.ml_archive-2.0.1] startup
+[3.257s] [ext: omni.kit.telemetry-0.5.0] startup
+[3.308s] [ext: omni.usd.config-1.0.4] startup
+[3.316s] [ext: omni.gpucompute.plugins-0.0.0] startup
+[3.317s] [ext: omni.usd.libs-1.0.1] startup
+[3.462s] [ext: omni.iray.libs-0.0.0] startup
+[3.472s] [ext: omni.mdl.neuraylib-0.2.8] startup
+[3.475s] [ext: omni.mdl-55.0.1] startup
+[3.518s] [ext: omni.kit.usd.mdl-1.0.1] startup
+[3.718s] [ext: omni.kit.loop-isaac-1.2.0] startup
+[3.719s] [ext: omni.kit.test-1.1.0] startup
+[3.823s] [ext: omni.appwindow-1.1.8] startup
+2025-01-13 11:56:06 [3,754ms] [Warning] [carb.windowing-glfw.plugin] GLFW initialization failed.
+2025-01-13 11:56:06 [3,754ms] [Warning] [carb] Failed to startup plugin carb.windowing-glfw.plugin (interfaces: [carb::windowing::IGLContext v1.0],[carb::windowing::IWindowing v1.4]) (impl: carb.windowing-glfw.plugin)
+[3.827s] [ext: omni.kit.renderer.core-1.0.2] startup
+2025-01-13 11:56:06 [3,774ms] [Warning] [carb.windowing-glfw.plugin] GLFW initialization failed.
+2025-01-13 11:56:06 [3,774ms] [Warning] [carb] Failed to startup plugin carb.windowing-glfw.plugin (interfaces: [carb::windowing::IGLContext v1.0],[carb::windowing::IWindowing v1.4]) (impl: carb.windowing-glfw.plugin)
+2025-01-13 11:56:06 [3,797ms] [Warning] [carb.windowing-glfw.plugin] GLFW initialization failed.
+2025-01-13 11:56:06 [3,797ms] [Warning] [carb] Failed to startup plugin carb.windowing-glfw.plugin (interfaces: [carb::windowing::IGLContext v1.0],[carb::windowing::IWindowing v1.4]) (impl: carb.windowing-glfw.plugin)
+[3.870s] [ext: omni.kit.renderer.capture-0.0.0] startup
+[3.874s] [ext: omni.kit.renderer.imgui-1.0.1] startup
+2025-01-13 11:56:06 [3,808ms] [Warning] [carb.windowing-glfw.plugin] GLFW initialization failed.
+2025-01-13 11:56:06 [3,808ms] [Warning] [carb] Failed to startup plugin carb.windowing-glfw.plugin (interfaces: [carb::windowing::IGLContext v1.0],[carb::windowing::IWindowing v1.4]) (impl: carb.windowing-glfw.plugin)
+2025-01-13 11:56:06 [3,811ms] [Warning] [carb.windowing-glfw.plugin] GLFW initialization failed.
+2025-01-13 11:56:06 [3,811ms] [Warning] [carb] Failed to startup plugin carb.windowing-glfw.plugin (interfaces: [carb::windowing::IGLContext v1.0],[carb::windowing::IWindowing v1.4]) (impl: carb.windowing-glfw.plugin)
+2025-01-13 11:56:06 [3,812ms] [Warning] [carb.windowing-glfw.plugin] GLFW initialization failed.
+2025-01-13 11:56:06 [3,812ms] [Warning] [carb] Failed to startup plugin carb.windowing-glfw.plugin (interfaces: [carb::windowing::IGLContext v1.0],[carb::windowing::IWindowing v1.4]) (impl: carb.windowing-glfw.plugin)
+[4.039s] [ext: omni.ui-2.25.22] startup
+[4.061s] [ext: omni.kit.mainwindow-1.0.3] startup
+[4.064s] [ext: carb.audio-0.1.0] startup
+[4.070s] [ext: omni.uiaudio-1.0.0] startup
+[4.071s] [ext: omni.kit.uiapp-0.0.0] startup
+[4.071s] [ext: omni.usd.schema.isaac-2.1.0] startup
+[4.085s] [ext: omni.usd.schema.audio-0.0.0] startup
+[4.091s] [ext: omni.usd.schema.anim-0.0.0] startup
+[4.125s] [ext: omni.usd.schema.geospatial-0.0.0] startup
+[4.130s] [ext: omni.usd.schema.semantics-0.0.0] startup
+[4.134s] [ext: omni.usd.schema.omnigraph-1.0.0] startup
+[4.144s] [ext: omni.anim.navigation.schema-106.1.0] startup
+[4.150s] [ext: omni.usd.schema.scene.visualization-2.0.2] startup
+[4.152s] [ext: omni.usd.schema.omniscripting-1.0.0] startup
+[4.160s] [ext: omni.anim.graph.schema-106.1.0] startup
+[4.171s] [ext: omni.usd.schema.physx-106.1.9] startup
+[4.225s] [ext: omni.usd.schema.forcefield-106.1.9] startup
+[4.234s] [ext: omni.graph.exec-0.9.4] startup
+[4.235s] [ext: omni.kit.usd_undo-0.1.8] startup
+[4.236s] [ext: omni.kit.actions.core-1.0.0] startup
+[4.239s] [ext: omni.kit.exec.core-0.13.4] startup
+[4.244s] [ext: omni.usd_resolver-1.0.0] startup
+[4.249s] [ext: omni.kit.commands-1.4.9] startup
+[4.256s] [ext: omni.activity.core-1.0.1] startup
+[4.258s] [ext: omni.usd.core-1.4.1] startup
+[4.263s] [ext: omni.resourcemonitor-105.0.1] startup
+[4.266s] [ext: omni.kit.window.popup_dialog-2.0.24] startup
+[4.273s] [ext: omni.timeline-1.0.10] startup
+[4.276s] [ext: omni.kit.widget.nucleus_connector-1.1.9] startup
+[4.279s] [ext: usdrt.scenegraph-7.5.0] startup
+[4.355s] [ext: omni.kit.audiodeviceenum-1.0.1] startup
+[4.357s] [ext: omni.hydra.usdrt_delegate-7.5.1] startup
+[4.380s] [ext: omni.hydra.scene_delegate-0.3.3] startup
+[4.387s] [ext: omni.usd-1.12.2] startup
+[4.450s] [ext: omni.kit.menu.core-1.0.4] startup
+[4.451s] [ext: omni.kit.collaboration.telemetry-1.0.0] startup
+[4.452s] [ext: omni.kit.property.adapter.core-1.0.1] startup
+[4.456s] [ext: omni.kit.menu.utils-1.5.27] startup
+[4.470s] [ext: omni.kit.clipboard-1.0.4] startup
+[4.471s] [ext: omni.kit.collaboration.channel_manager-1.0.12] startup
+[4.472s] [ext: omni.kit.property.adapter.usd-1.0.1] startup
+[4.474s] [ext: omni.kit.widget.options_menu-1.1.6] startup
+[4.479s] [ext: omni.kit.widget.graph-1.12.15] startup
+[4.488s] [ext: omni.kit.widget.searchfield-1.1.8] startup
+[4.490s] [ext: omni.kit.widget.filter-1.1.4] startup
+[4.491s] [ext: omni.kit.property.adapter.fabric-1.0.1] startup
+[4.493s] [ext: omni.ui_query-1.1.4] startup
+[4.494s] [ext: omni.kit.window.extensions-1.4.11] startup
+[4.503s] [ext: omni.kit.usd.layers-2.1.36] startup
+[4.517s] [ext: omni.kit.widget.context_menu-1.2.2] startup
+[4.519s] [ext: omni.hydra.rtx.shadercache.vulkan-1.0.0] startup
+[4.521s] [ext: omni.kit.notification_manager-1.0.9] startup
+[4.527s] [ext: omni.kit.hotkeys.core-1.3.5] startup
+[4.528s] [ext: omni.kit.context_menu-1.8.1] startup
+[4.531s] [ext: omni.kit.widget.prompt-1.0.7] startup
+[4.532s] [ext: omni.kit.helper.file_utils-0.1.8] startup
+[4.535s] [ext: omni.kit.widget.nucleus_info-1.0.2] startup
+[4.536s] [ext: omni.kit.widget.filebrowser-2.10.51] startup
+[4.544s] [ext: omni.kit.search_core-1.0.5] startup
+[4.545s] [ext: omni.kit.widget.path_field-2.0.10] startup
+[4.547s] [ext: omni.ui.scene-1.10.3] startup
+[4.555s] [ext: omni.kit.widget.search_delegate-1.0.5] startup
+[4.557s] [ext: omni.kit.widget.options_button-1.0.3] startup
+[4.558s] [ext: omni.kit.widget.browser_bar-2.0.10] startup
+[4.559s] [ext: omni.volume-0.5.0] startup
+[4.564s] [ext: omni.kit.window.filepicker-2.10.40] startup
+[4.585s] [ext: omni.ujitso.processor.texture-1.0.0] startup
+[4.587s] [ext: omni.kit.window.file_exporter-1.0.30] startup
+[4.590s] [ext: omni.ujitso.client-0.0.0] startup
+[4.591s] [ext: omni.kit.widget.stage-2.11.2] startup
+[4.608s] [ext: omni.kit.widget.live_session_management.ui-1.0.1] startup
+[4.612s] [ext: omni.kit.collaboration.presence_layer-1.0.9] startup
+[4.616s] [ext: omni.hydra.rtx-1.0.0] startup
+[4.646s] [ext: omni.inspect-1.0.1] startup
+[4.649s] [ext: omni.kit.widget.searchable_combobox-1.0.6] startup
+[4.650s] [ext: omni.kit.window.file_importer-1.1.12] startup
+[4.652s] [ext: omni.kit.stage_template.core-1.1.22] startup
+[4.653s] [ext: omni.kit.widget.settings-1.2.2] startup
+[4.656s] [ext: omni.kit.window.file-1.3.54] startup
+[4.662s] [ext: omni.kit.window.drop_support-1.0.3] startup
+[4.662s] [ext: omni.kit.window.content_browser_registry-0.0.6] startup
+[4.663s] [ext: omni.kit.window.preferences-1.6.0] startup
+[4.740s] [ext: omni.kit.window.content_browser-2.9.18] startup
+[4.772s] [ext: omni.kit.widget.live_session_management-1.2.20] startup
+[4.776s] [ext: omni.kit.widget.text_editor-1.0.2] startup
+[4.779s] [ext: omni.kit.hydra_texture-1.3.9] startup
+[4.785s] [ext: omni.kit.viewport.legacy_gizmos-1.1.0] startup
+[4.789s] [ext: omni.kit.raycast.query-1.0.5] startup
+[4.798s] [ext: omni.kit.material.library-1.5.6] startup
+[4.810s] [ext: omni.kit.widget.viewport-106.1.0] startup
+[4.817s] [ext: omni.kit.viewport.registry-104.0.6] startup
+[4.818s] [ext: omni.hydra.engine.stats-1.0.2] startup
+[4.822s] [ext: omni.kit.widget.highlight_label-1.0.2] startup
+[4.823s] [ext: omni.kit.viewport.window-107.0.6] startup
+[4.858s] [ext: omni.kit.window.property-1.11.3] startup
+[4.862s] [ext: omni.graph.core-2.179.2] startup
+[4.866s] [ext: omni.graph.tools-1.79.0] startup
+[4.906s] [ext: omni.kit.viewport.utility-1.0.17] startup
+[4.907s] [ext: omni.kit.property.usd-4.2.8] startup
+[4.923s] [ext: omni.debugdraw-0.1.3] startup
+[4.929s] [ext: omni.graph-1.140.0] startup
+[5.112s] [ext: omni.graph.ui-1.70.2] startup
+[5.151s] [ext: omni.kvdb-106.1.9] startup
+[5.159s] [ext: omni.graph.image.core-0.4.5] startup
+[5.162s] [ext: omni.localcache-106.1.9] startup
+[5.165s] [ext: omni.graph.image.nodes-1.1.0] startup
+[5.171s] [ext: omni.usdphysics-106.1.9] startup
+[5.177s] [ext: omni.physx.foundation-106.1.9] startup
+[5.180s] [ext: omni.convexdecomposition-106.1.9] startup
+[5.189s] [ext: omni.graph.nodes-1.146.1] startup
+[5.207s] [ext: omni.physx.cooking-106.1.9] startup
+[5.229s] [ext: omni.kit.primitive.mesh-1.0.17] startup
+[5.235s] [ext: omni.physx-106.1.9] startup
+[5.258s] [ext: omni.kit.stage_templates-1.2.5] startup
+[5.263s] [ext: omni.isaac.version-1.1.0] startup
+[5.266s] [ext: omni.kit.widget.material_preview-1.0.16] startup
+[5.270s] [ext: omni.isaac.nucleus-0.3.1] startup
+[5.272s] [ext: omni.physics.tensors-106.1.9] startup
+[5.285s] [ext: omni.physx.stageupdate-106.1.9] startup
+[5.290s] [ext: omni.graph.action_core-1.1.6] startup
+[5.296s] [ext: omni.warp.core-1.2.1] startup
+[5.492s] [ext: omni.physx.tensors-106.1.9] startup
+[5.502s] [ext: omni.graph.scriptnode-1.20.1] startup
+[5.504s] [ext: omni.kit.manipulator.viewport-107.0.0] startup
+[5.511s] [ext: omni.graph.action_nodes-1.24.0] startup
+[5.526s] [ext: omni.kit.ui_test-1.3.2] startup
+[5.537s] [ext: omni.isaac.core-3.19.5] startup
+[8.056s] [ext: omni.graph.visualization.nodes-2.1.1] startup
+[8.068s] [ext: omni.graph.action-1.102.1] startup
+[8.071s] [ext: omni.kit.window.cursor-1.1.2] startup
+[8.078s] [ext: omni.isaac.ui-0.16.0] startup
+[8.092s] [ext: omni.kit.viewport.menubar.core-106.1.0] startup
+[8.131s] [ext: omni.kit.graph.delegate.default-1.2.2] startup
+[8.134s] [ext: omni.syntheticdata-0.6.9] startup
+[8.191s] [ext: omni.kit.graph.usd.commands-1.3.1] startup
+[8.197s] [ext: omni.kit.graph.editor.core-1.5.3] startup
+[8.209s] [ext: omni.kit.numpy.common-0.1.2] startup
+[8.213s] [ext: omni.warp-1.2.1] startup
+[8.241s] [ext: omni.kit.window.material_graph-1.8.18] startup
+[8.347s] [ext: omni.isaac.dynamic_control-1.3.8] startup
+[8.384s] [ext: omni.replicator.core-1.11.20] startup
+2025-01-13 11:56:11 [8,396ms] [Warning] [omni.replicator.core.scripts.annotators] Annotator PostProcessDispatch is already registered, overwriting annotator template
+[8.743s] [ext: omni.isaac.lula-3.0.1] startup
+[8.762s] [ext: omni.isaac.surface_gripper-1.0.1] startup
+[8.770s] [ext: omni.isaac.core_nodes-1.16.3] startup
+[8.821s] [ext: omni.isaac.motion_generation-7.1.0] startup
+[8.855s] [ext: omni.isaac.manipulators-2.1.0] startup
+[8.866s] [ext: omni.isaac.franka-0.4.1] startup
+[8.878s] [ext: omni.kit.graph.widget.variables-2.1.0] startup
+[8.887s] [ext: omni.kit.graph.delegate.modern-1.10.6] startup
+[8.916s] [ext: omni.isaac.cortex-0.3.9] startup
+[8.924s] [ext: omni.graph.window.core-1.113.1] startup
+[9.005s] [ext: omni.isaac.wheeled_robots-2.3.3] startup
+[9.049s] [ext: omni.isaac.cortex.sample_behaviors-1.0.6] startup
+[9.055s] [ext: omni.graph.window.generic-1.26.0] startup
+[9.087s] [ext: omni.isaac.menu-0.7.3] startup
+[9.109s] [ext: omni.kit.widget.live-2.1.8] startup
+[9.125s] [ext: omni.kit.actions.window-1.1.1] startup
+[9.149s] [ext: omni.kit.widget.cache_indicator-2.0.10] startup
+[9.333s] [ext: omni.kit.hotkeys.window-1.4.5] startup
+2025-01-13 11:56:11 [9,265ms] [Warning] [omni.kit.widget.cache_indicator.cache_state_menu] Unable to detect Omniverse Cache Server. Consider installing it for better IO performance.
+[9.358s] [ext: omni.kit.ui.actions-1.0.2] startup
+[9.365s] [ext: omni.kit.widget.stage_icons-1.0.5] startup
+[9.370s] [ext: omni.kit.menu.common-1.1.7] startup
+[9.383s] [ext: omni.kit.selection-0.1.4] startup
+[9.388s] [ext: omni.isaac.kit-1.13.2] startup
+[9.390s] [ext: omni.isaac.block_world-1.0.0] startup
+[9.413s] [ext: omni.kit.window.stage-2.5.10] startup
+[9.423s] [ext: omni.isaac.debug_draw-1.1.0] startup
+[9.431s] [ext: omni.kit.menu.edit-1.1.24] startup
+[9.442s] [ext: omni.kit.menu.file-1.1.14] startup
+[9.447s] [ext: omni.kit.profiler.window-2.2.3] startup
+[9.466s] [ext: omni.kit.menu.stage-1.2.5] startup
+[9.468s] [ext: omni.isaac.occupancy_map-1.0.3] startup
+[9.488s] [ext: omni.importer.mjcf-1.1.1] startup
+[9.510s] [ext: omni.graph.window.action-1.28.0] startup
+[9.526s] [ext: omni.kit.property.camera-1.0.8] startup
+[9.530s] [ext: omni.kit.property.light-1.0.10] startup
+[9.534s] [ext: omni.kit.property.geometry-1.3.1] startup
+[9.541s] [ext: omni.hydra.scene_api-0.1.2] startup
+[9.549s] [ext: omni.kit.property.audio-1.0.14] startup
+[9.555s] [ext: omni.kit.property.render-1.1.2] startup
+[9.559s] [ext: omni.kit.property.transform-1.5.9] startup
+[9.566s] [ext: omni.kit.property.material-1.10.8] startup
+[9.577s] [ext: omni.kit.widget.layers-1.8.0] startup
+[9.602s] [ext: omni.kit.property.isaac-0.2.3] startup
+[9.606s] [ext: omni.kit.property.bundle-1.3.1] startup
+[9.610s] [ext: omni.sensors.nv.common-1.2.2-isaac-1] startup
+[9.630s] [ext: omni.kit.property.layer-1.1.8] startup
+[9.635s] [ext: omni.kit.stage_column.payload-2.0.0] startup
+[9.639s] [ext: omni.isaac.scene_blox-0.1.2] startup
+[9.642s] [ext: omni.sensors.nv.materials-1.2.1-isaac-1] startup
+[9.646s] [ext: omni.sensors.nv.wpm-1.2.1-isaac-1] startup
+[9.648s] [ext: omni.kit.viewport.actions-106.0.2] startup
+[9.657s] [ext: omni.sensors.nv.lidar-1.2.2-isaac-1] startup
+[9.667s] [ext: omni.sensors.nv.radar-1.2.1-isaac-1] startup
+[9.678s] [ext: omni.kit.viewport.menubar.display-107.0.2] startup
+[9.682s] [ext: omni.kit.manipulator.transform-104.7.4] startup
+[9.687s] [ext: omni.kit.widget.toolbar-1.7.2] startup
+[9.701s] [ext: omni.sensors.tiled-0.0.6] startup
+[9.705s] [ext: omni.sensors.nv.ids-1.1.0-isaac-1] startup
+[9.713s] [ext: omni.isaac.range_sensor-3.1.2] startup
+[9.736s] [ext: omni.usdphysics.ui-106.1.9] startup
+[9.783s] [ext: omni.physx.commands-106.1.9] startup
+[9.791s] [ext: omni.kit.manipulator.tool.snap-1.5.11] startup
+[9.802s] [ext: omni.isaac.sensor-12.9.1] startup
+[9.949s] [ext: omni.kit.manipulator.selector-1.1.1] startup
+[9.957s] [ext: omni.physx.ui-106.1.9] startup
+[10.036s] [ext: omni.isaac.quadruped-2.0.1] startup
+[10.052s] [ext: omni.kit.viewport.manipulator.transform-107.0.2] startup
+[10.059s] [ext: omni.physx.demos-106.1.9] startup
+[10.100s] [ext: omni.kit.property.physx-106.1.9] startup
+[10.243s] [ext: omni.kit.widget.calendar-1.0.8] startup
+[10.249s] [ext: omni.kit.manipulator.prim.core-107.0.4] startup
+[10.262s] [ext: omni.fabric.commands-1.1.5] startup
+[10.268s] [ext: omni.physx.vehicle-106.1.9] startup
+[10.303s] [ext: omni.kit.widget.extended_searchfield-1.0.28] startup
+[10.321s] [ext: omni.kit.manipulator.prim.fabric-107.0.3] startup
+[10.327s] [ext: omni.kit.manipulator.prim.usd-107.0.2] startup
+[10.331s] [ext: omni.kit.widget.timeline-105.0.1] startup
+[10.337s] [ext: omni.kit.window.commands-0.2.6] startup
+[10.341s] [ext: omni.physx.camera-106.1.9] startup
+[10.362s] [ext: omni.kit.manipulator.camera-105.0.5] startup
+[10.370s] [ext: omni.kit.viewport.menubar.camera-107.0.2] startup
+[10.381s] [ext: omni.kit.manipulator.prim-107.0.0] startup
+[10.382s] [ext: omni.kit.manipulator.selection-106.0.1] startup
+[10.384s] [ext: omni.kit.window.toolbar-1.6.1] startup
+[10.391s] [ext: omni.kit.stage_column.variant-1.0.13] startup
+[10.393s] [ext: omni.kit.viewport.menubar.render-106.1.1] startup
+[10.400s] [ext: omni.kit.viewport.menubar.settings-107.0.3] startup
+[10.408s] [ext: omni.physx.cct-106.1.9] startup
+[10.434s] [ext: omni.physx.graph-106.1.9] startup
+[10.483s] [ext: omni.physx.supportui-106.1.9] startup
+[10.518s] [ext: omni.physx.telemetry-106.1.9] startup
+[10.526s] [ext: omni.graph.ui_nodes-1.26.0] startup
+[10.538s] [ext: omni.kit.viewport.bundle-104.0.1] startup
+[10.538s] [ext: omni.isaac.universal_robots-0.3.5] startup
+[10.543s] [ext: omni.kit.window.console-0.2.13] startup
+[10.568s] [ext: omni.kit.window.script_editor-1.7.6] startup
+[10.579s] [ext: omni.kit.menu.create-1.0.16] startup
+[10.587s] [ext: omni.graph.bundle.action-2.4.1] startup
+[10.593s] [ext: omni.physx.bundle-106.1.9] startup
+[10.597s] [ext: omni.rtx.window.settings-0.6.17] startup
+[10.609s] [ext: omni.kit.window.status_bar-0.1.7] startup
+[10.617s] [ext: omni.kit.window.title-1.1.5] startup
+[10.626s] [ext: omni.replicator.isaac-1.15.2] startup
+[10.679s] [ext: omni.replicator.replicator_yaml-2.0.6] startup
+[10.721s] [ext: omni.rtx.settings.core-0.6.3] startup
+[10.744s] [ext: omni.kit.viewport.menubar.lighting-106.0.2] startup
+[10.764s] [ext: semantics.schema.editor-0.3.8] startup
+[10.780s] [ext: semantics.schema.property-1.0.4] startup
+[10.784s] [ext: omni.kit.viewport.rtx-104.0.1] startup
+[10.784s] [ext: omni.isaac.utils-1.0.1] startup
+[10.792s] [ext: omni.isaac.cloner-0.8.1] startup
+[10.797s] [ext: omni.importer.urdf-1.14.1] startup
+[10.883s] [ext: omni.kit.window.stats-0.1.6] startup
+[10.899s] [ext: omni.isaac.sim.python-4.2.0] startup
+[10.902s] Simulation App Starting
+[15.280s] app ready
+2025-01-13 11:56:18 [16,152ms] [Warning] [omni.kit.imgui_renderer.plugin] _createExtendCursor: No windowing.
+2025-01-13 11:56:18 [16,152ms] [Warning] [omni.kit.imgui_renderer.plugin] _createExtendCursor: No windowing.
+[17.429s] Simulation App Startup Complete
+[17.450s] [ext: omni.isaac.ros2_bridge-2.32.6] startup
+[17.533s] Attempting to load system rclpy
+[17.566s] rclpy loaded
+2025-01-13 11:56:20 [17,739ms] [Warning] [pxr.OmniGraphSchema] pxr.OmniGraphSchema is deprecated - please use OmniGraphSchema instead
+[18.021s] [ext: omni.kit.streamsdk.plugins-3.2.1] startup
+[18.037s] [ext: omni.kit.renderer.cuda_interop-1.0.1] startup
+[18.042s] [ext: omni.kit.livestream.core-3.2.0] startup
+[18.062s] [ext: omni.kit.livestream.native-4.1.0] startup
+
+Active user not found. Using default user [kiosk]2025-01-13 11:56:21 [19,259ms] [Warning] [omni.usd] Warning: in _ReportErrors at line 2890 of /builds/omniverse/usd-ci/USD/pxr/usd/usd/stage.cpp -- In </World/City/Ground/grass_plain>: Could not open asset @file:/root/ros2_ws/src/Isaac_ml/meshes/world/unstructured_orchard/grass_plain.usdc@ for payload introduced by @/root/ssd1/robotics/models/meshes/world/unstructured_orchard/ground1.usdc@</World/grass_plain>. (recomposing stage on stage @anon:0x39d97ea0:World0.usd@ <0x39da5030>)
+
+2025-01-13 11:56:22 [19,326ms] [Warning] [omni.isaac.sensor.scripts.imu_sensor] Creating a new IMU prim at path /World/robot/base_link/imu
+2025-01-13 11:56:22 [19,341ms] [Warning] [carb.windowing-glfw.plugin] GLFW initialization failed.
+2025-01-13 11:56:22 [19,341ms] [Warning] [carb] Failed to startup plugin carb.windowing-glfw.plugin (interfaces: [carb::windowing::IGLContext v1.0],[carb::windowing::IWindowing v1.4]) (impl: carb.windowing-glfw.plugin)
+2025-01-13 11:56:22 [19,380ms] [Warning] [omni.fabric.plugin] getTypes called on non-existent path /PhysicsScene_16e12ee3daea
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_93': buffer size 3858 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_91': buffer size 27813 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_89': buffer size 9864 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_86': buffer size 8382 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_85': buffer size 11964 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_81': buffer size 16152 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_80': buffer size 38421 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_77': buffer size 26457 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_75': buffer size 3354 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_74': buffer size 4029 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_73': buffer size 2460 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_72': buffer size 3354 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_71': buffer size 2460 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_70': buffer size 3354 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_67': buffer size 109071 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_65': buffer size 33288 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_64': buffer size 3819 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_62': buffer size 23004 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_60': buffer size 4344 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_27': buffer size 1788 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_78': buffer size 121236 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_25': buffer size 1317 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_2': buffer size 11607 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_22': buffer size 1317 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_14': buffer size 1788 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_61': buffer size 3819 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_11': buffer size 19371 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_26': buffer size 33738 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_92': buffer size 20946 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_84': buffer size 3354 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_8': buffer size 1788 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_15': buffer size 1860 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_83': buffer size 2460 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_39': buffer size 6612 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_30': buffer size 1788 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st': buffer size 2460 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_17': buffer size 1860 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_20': buffer size 18120 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_40': buffer size 10509 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,091ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_7': buffer size 17409 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,093ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_32': buffer size 2460 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,093ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_48': buffer size 9759 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,093ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_10': buffer size 1860 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,093ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_35': buffer size 20097 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,093ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_18': buffer size 1317 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_23': buffer size 33738 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_12': buffer size 1317 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_1': buffer size 3354 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_68': buffer size 7644 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_13': buffer size 33738 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_4': buffer size 444 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_59': buffer size 31830 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_5': buffer size 444 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_28': buffer size 19371 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_24': buffer size 17409 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_50': buffer size 23403 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_66': buffer size 7644 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_6': buffer size 24426 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_52': buffer size 1443 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_9': buffer size 18159 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_88': buffer size 11430 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_29': buffer size 1860 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_53': buffer size 9327 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_55': buffer size 9759 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_79': buffer size 14085 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_31': buffer size 3354 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_42': buffer size 6612 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_21': buffer size 19356 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_34': buffer size 7644 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_16': buffer size 19356 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_54': buffer size 6000 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_82': buffer size 13323 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_36': buffer size 23403 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_37': buffer size 6612 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_38': buffer size 23403 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_69': buffer size 33288 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_41': buffer size 23403 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_33': buffer size 33288 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_43': buffer size 5058 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_44': buffer size 4344 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_87': buffer size 7527 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_63': buffer size 3258 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_45': buffer size 20094 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_90': buffer size 11430 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_46': buffer size 23403 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_47': buffer size 6612 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_3': buffer size 43434 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_57': buffer size 20094 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_49': buffer size 20097 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_19': buffer size 33738 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_51': buffer size 6612 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_76': buffer size 2460 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_56': buffer size 21327 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:23 [21,094ms] [Warning] [omni.hydra] Mesh '/World/robot/base_link/visuals' has corrupted data in primvar 'st_58': buffer size 6000 doesn't match expected size 1381443 in faceVarying primvars
+2025-01-13 11:56:24 [21,881ms] [Warning] [omni.hydra] Mesh '/World/robot/lidar_mount_link/visuals' has corrupted data in primvar 'st_1': buffer size 20142 doesn't match expected size 82548 in faceVarying primvars
+2025-01-13 11:56:24 [21,881ms] [Warning] [omni.hydra] Mesh '/World/robot/lidar_mount_link/visuals' has corrupted data in primvar 'st': buffer size 62406 doesn't match expected size 82548 in faceVarying primvars
+2025-01-13 11:56:24 [21,920ms] [Warning] [omni.hydra] Mesh '/World/robot/l_roll_static_link/visuals' has corrupted data in primvar 'st_6': buffer size 9834 doesn't match expected size 41841 in faceVarying primvars
+2025-01-13 11:56:24 [21,920ms] [Warning] [omni.hydra] Mesh '/World/robot/l_roll_static_link/visuals' has corrupted data in primvar 'st_5': buffer size 6432 doesn't match expected size 41841 in faceVarying primvars
+2025-01-13 11:56:24 [21,920ms] [Warning] [omni.hydra] Mesh '/World/robot/l_roll_static_link/visuals' has corrupted data in primvar 'st_4': buffer size 6762 doesn't match expected size 41841 in faceVarying primvars
+2025-01-13 11:56:24 [21,920ms] [Warning] [omni.hydra] Mesh '/World/robot/l_roll_static_link/visuals' has corrupted data in primvar 'st_3': buffer size 8286 doesn't match expected size 41841 in faceVarying primvars
+2025-01-13 11:56:24 [21,920ms] [Warning] [omni.hydra] Mesh '/World/robot/l_roll_static_link/visuals' has corrupted data in primvar 'st_2': buffer size 1386 doesn't match expected size 41841 in faceVarying primvars
+2025-01-13 11:56:24 [21,920ms] [Warning] [omni.hydra] Mesh '/World/robot/l_roll_static_link/visuals' has corrupted data in primvar 'st_1': buffer size 1386 doesn't match expected size 41841 in faceVarying primvars
+2025-01-13 11:56:24 [21,920ms] [Warning] [omni.hydra] Mesh '/World/robot/l_roll_static_link/visuals' has corrupted data in primvar 'st': buffer size 7755 doesn't match expected size 41841 in faceVarying primvars
+2025-01-13 11:56:24 [21,935ms] [Warning] [omni.hydra] Mesh '/World/robot/l_rear_wheel_rotate_link/visuals' has corrupted data in primvar 'st_15': buffer size 18840 doesn't match expected size 229890 in faceVarying primvars
+2025-01-13 11:56:24 [21,935ms] [Warning] [omni.hydra] Mesh '/World/robot/l_rear_wheel_rotate_link/visuals' has corrupted data in primvar 'st_14': buffer size 15444 doesn't match expected size 229890 in faceVarying primvars
+2025-01-13 11:56:24 [21,935ms] [Warning] [omni.hydra] Mesh '/World/robot/l_rear_wheel_rotate_link/visuals' has corrupted data in primvar 'st': buffer size 13722 doesn't match expected size 229890 in faceVarying primvars
+2025-01-13 11:56:24 [21,935ms] [Warning] [omni.hydra] Mesh '/World/robot/l_rear_wheel_rotate_link/visuals' has corrupted data in primvar 'st_7': buffer size 15609 doesn't match expected size 229890 in faceVarying primvars
+2025-01-13 11:56:24 [21,935ms] [Warning] [omni.hydra] Mesh '/World/robot/l_rear_wheel_rotate_link/visuals' has corrupted data in primvar 'st_11': buffer size 7020 doesn't match expected size 229890 in faceVarying primvars
+2025-01-13 11:56:24 [21,935ms] [Warning] [omni.hydra] Mesh '/World/robot/l_rear_wheel_rotate_link/visuals' has corrupted data in primvar 'st_2': buffer size 1572 doesn't match expected size 229890 in faceVarying primvars
+2025-01-13 11:56:24 [21,935ms] [Warning] [omni.hydra] Mesh '/World/robot/l_rear_wheel_rotate_link/visuals' has corrupted data in primvar 'st_1': buffer size 14886 doesn't match expected size 229890 in faceVarying primvars
+2025-01-13 11:56:24 [21,936ms] [Warning] [omni.hydra] Mesh '/World/robot/l_rear_wheel_rotate_link/visuals' has corrupted data in primvar 'st_12': buffer size 7020 doesn't match expected size 229890 in faceVarying primvars
+2025-01-13 11:56:24 [21,936ms] [Warning] [omni.hydra] Mesh '/World/robot/l_rear_wheel_rotate_link/visuals' has corrupted data in primvar 'st_3': buffer size 40758 doesn't match expected size 229890 in faceVarying primvars
+2025-01-13 11:56:24 [21,936ms] [Warning] [omni.hydra] Mesh '/World/robot/l_rear_wheel_rotate_link/visuals' has corrupted data in primvar 'st_13': buffer size 13302 doesn't match expected size 229890 in faceVarying primvars
+2025-01-13 11:56:24 [21,936ms] [Warning] [omni.hydra] Mesh '/World/robot/l_rear_wheel_rotate_link/visuals' has corrupted data in primvar 'st_4': buffer size 2442 doesn't match expected size 229890 in faceVarying primvars
+2025-01-13 11:56:24 [21,936ms] [Warning] [omni.hydra] Mesh '/World/robot/l_rear_wheel_rotate_link/visuals' has corrupted data in primvar 'st_5': buffer size 15444 doesn't match expected size 229890 in faceVarying primvars
+2025-01-13 11:56:24 [21,936ms] [Warning] [omni.hydra] Mesh '/World/robot/l_rear_wheel_rotate_link/visuals' has corrupted data in primvar 'st_6': buffer size 13455 doesn't match expected size 229890 in faceVarying primvars
+2025-01-13 11:56:24 [21,936ms] [Warning] [omni.hydra] Mesh '/World/robot/l_rear_wheel_rotate_link/visuals' has corrupted data in primvar 'st_8': buffer size 17001 doesn't match expected size 229890 in faceVarying primvars
+2025-01-13 11:56:24 [21,936ms] [Warning] [omni.hydra] Mesh '/World/robot/l_rear_wheel_rotate_link/visuals' has corrupted data in primvar 'st_9': buffer size 11487 doesn't match expected size 229890 in faceVarying primvars
+2025-01-13 11:56:24 [21,936ms] [Warning] [omni.hydra] Mesh '/World/robot/l_rear_wheel_rotate_link/visuals' has corrupted data in primvar 'st_10': buffer size 21888 doesn't match expected size 229890 in faceVarying primvars
+2025-01-13 11:56:24 [22,013ms] [Warning] [omni.hydra] Mesh '/World/robot/l_rear_wheel/visuals' has corrupted data in primvar 'st_1': buffer size 24411 doesn't match expected size 121746 in faceVarying primvars
+2025-01-13 11:56:24 [22,013ms] [Warning] [omni.hydra] Mesh '/World/robot/l_rear_wheel/visuals' has corrupted data in primvar 'st': buffer size 97335 doesn't match expected size 121746 in faceVarying primvars
+2025-01-13 11:56:24 [22,048ms] [Warning] [omni.hydra] Mesh '/World/robot/l_front_wheel_rotate_link/visuals' has corrupted data in primvar 'st_15': buffer size 18840 doesn't match expected size 229890 in faceVarying primvars
+2025-01-13 11:56:24 [22,048ms] [Warning] [omni.hydra] Mesh '/World/robot/l_front_wheel_rotate_link/visuals' has corrupted data in primvar 'st_14': buffer size 15444 doesn't match expected size 229890 in faceVarying primvars
+2025-01-13 11:56:24 [22,048ms] [Warning] [omni.hydra] Mesh '/World/robot/l_front_wheel_rotate_link/visuals' has corrupted data in primvar 'st': buffer size 13722 doesn't match expected size 229890 in faceVarying primvars
+2025-01-13 11:56:24 [22,048ms] [Warning] [omni.hydra] Mesh '/World/robot/l_front_wheel_rotate_link/visuals' has corrupted data in primvar 'st_7': buffer size 15609 doesn't match expected size 229890 in faceVarying primvars
+2025-01-13 11:56:24 [22,048ms] [Warning] [omni.hydra] Mesh '/World/robot/l_front_wheel_rotate_link/visuals' has corrupted data in primvar 'st_11': buffer size 7020 doesn't match expected size 229890 in faceVarying primvars
+2025-01-13 11:56:24 [22,048ms] [Warning] [omni.hydra] Mesh '/World/robot/l_front_wheel_rotate_link/visuals' has corrupted data in primvar 'st_2': buffer size 1572 doesn't match expected size 229890 in faceVarying primvars
+2025-01-13 11:56:24 [22,048ms] [Warning] [omni.hydra] Mesh '/World/robot/l_front_wheel_rotate_link/visuals' has corrupted data in primvar 'st_1': buffer size 14886 doesn't match expected size 229890 in faceVarying primvars
+2025-01-13 11:56:24 [22,048ms] [Warning] [omni.hydra] Mesh '/World/robot/l_front_wheel_rotate_link/visuals' has corrupted data in primvar 'st_12': buffer size 7020 doesn't match expected size 229890 in faceVarying primvars
+2025-01-13 11:56:24 [22,048ms] [Warning] [omni.hydra] Mesh '/World/robot/l_front_wheel_rotate_link/visuals' has corrupted data in primvar 'st_3': buffer size 40758 doesn't match expected size 229890 in faceVarying primvars
+2025-01-13 11:56:24 [22,048ms] [Warning] [omni.hydra] Mesh '/World/robot/l_front_wheel_rotate_link/visuals' has corrupted data in primvar 'st_13': buffer size 13302 doesn't match expected size 229890 in faceVarying primvars
+2025-01-13 11:56:24 [22,048ms] [Warning] [omni.hydra] Mesh '/World/robot/l_front_wheel_rotate_link/visuals' has corrupted data in primvar 'st_4': buffer size 2442 doesn't match expected size 229890 in faceVarying primvars
+2025-01-13 11:56:24 [22,048ms] [Warning] [omni.hydra] Mesh '/World/robot/l_front_wheel_rotate_link/visuals' has corrupted data in primvar 'st_5': buffer size 15444 doesn't match expected size 229890 in faceVarying primvars
+2025-01-13 11:56:24 [22,048ms] [Warning] [omni.hydra] Mesh '/World/robot/l_front_wheel_rotate_link/visuals' has corrupted data in primvar 'st_6': buffer size 13455 doesn't match expected size 229890 in faceVarying primvars
+2025-01-13 11:56:24 [22,048ms] [Warning] [omni.hydra] Mesh '/World/robot/l_front_wheel_rotate_link/visuals' has corrupted data in primvar 'st_8': buffer size 17001 doesn't match expected size 229890 in faceVarying primvars
+2025-01-13 11:56:24 [22,048ms] [Warning] [omni.hydra] Mesh '/World/robot/l_front_wheel_rotate_link/visuals' has corrupted data in primvar 'st_9': buffer size 11487 doesn't match expected size 229890 in faceVarying primvars
+2025-01-13 11:56:24 [22,048ms] [Warning] [omni.hydra] Mesh '/World/robot/l_front_wheel_rotate_link/visuals' has corrupted data in primvar 'st_10': buffer size 21888 doesn't match expected size 229890 in faceVarying primvars
+2025-01-13 11:56:24 [22,074ms] [Warning] [omni.hydra] Mesh '/World/robot/r_bogie_link/visuals' has corrupted data in primvar 'st_19': buffer size 31122 doesn't match expected size 385806 in faceVarying primvars
+2025-01-13 11:56:24 [22,074ms] [Warning] [omni.hydra] Mesh '/World/robot/r_bogie_link/visuals' has corrupted data in primvar 'st_18': buffer size 12918 doesn't match expected size 385806 in faceVarying primvars
+2025-01-13 11:56:24 [22,074ms] [Warning] [omni.hydra] Mesh '/World/robot/r_bogie_link/visuals' has corrupted data in primvar 'st_16': buffer size 1596 doesn't match expected size 385806 in faceVarying primvars
+2025-01-13 11:56:24 [22,074ms] [Warning] [omni.hydra] Mesh '/World/robot/r_bogie_link/visuals' has corrupted data in primvar 'st_15': buffer size 17610 doesn't match expected size 385806 in faceVarying primvars
+2025-01-13 11:56:24 [22,074ms] [Warning] [omni.hydra] Mesh '/World/robot/r_bogie_link/visuals' has corrupted data in primvar 'st_14': buffer size 2856 doesn't match expected size 385806 in faceVarying primvars
+2025-01-13 11:56:24 [22,074ms] [Warning] [omni.hydra] Mesh '/World/robot/r_bogie_link/visuals' has corrupted data in primvar 'st': buffer size 2856 doesn't match expected size 385806 in faceVarying primvars
+2025-01-13 11:56:24 [22,074ms] [Warning] [omni.hydra] Mesh '/World/robot/r_bogie_link/visuals' has corrupted data in primvar 'st_17': buffer size 7752 doesn't match expected size 385806 in faceVarying primvars
+2025-01-13 11:56:24 [22,074ms] [Warning] [omni.hydra] Mesh '/World/robot/r_bogie_link/visuals' has corrupted data in primvar 'st_7': buffer size 31122 doesn't match expected size 385806 in faceVarying primvars
+2025-01-13 11:56:24 [22,074ms] [Warning] [omni.hydra] Mesh '/World/robot/r_bogie_link/visuals' has corrupted data in primvar 'st_11': buffer size 27000 doesn't match expected size 385806 in faceVarying primvars
+2025-01-13 11:56:24 [22,074ms] [Warning] [omni.hydra] Mesh '/World/robot/r_bogie_link/visuals' has corrupted data in primvar 'st_2': buffer size 16044 doesn't match expected size 385806 in faceVarying primvars
+2025-01-13 11:56:24 [22,074ms] [Warning] [omni.hydra] Mesh '/World/robot/r_bogie_link/visuals' has corrupted data in primvar 'st_20': buffer size 44322 doesn't match expected size 385806 in faceVarying primvars
+2025-01-13 11:56:24 [22,074ms] [Warning] [omni.hydra] Mesh '/World/robot/r_bogie_link/visuals' has corrupted data in primvar 'st_1': buffer size 17160 doesn't match expected size 385806 in faceVarying primvars
+2025-01-13 11:56:24 [22,074ms] [Warning] [omni.hydra] Mesh '/World/robot/r_bogie_link/visuals' has corrupted data in primvar 'st_12': buffer size 26700 doesn't match expected size 385806 in faceVarying primvars
+2025-01-13 11:56:24 [22,074ms] [Warning] [omni.hydra] Mesh '/World/robot/r_bogie_link/visuals' has corrupted data in primvar 'st_3': buffer size 74106 doesn't match expected size 385806 in faceVarying primvars
+2025-01-13 11:56:24 [22,074ms] [Warning] [omni.hydra] Mesh '/World/robot/r_bogie_link/visuals' has corrupted data in primvar 'st_13': buffer size 2856 doesn't match expected size 385806 in faceVarying primvars
+2025-01-13 11:56:24 [22,074ms] [Warning] [omni.hydra] Mesh '/World/robot/r_bogie_link/visuals' has corrupted data in primvar 'st_4': buffer size 4788 doesn't match expected size 385806 in faceVarying primvars
+2025-01-13 11:56:24 [22,074ms] [Warning] [omni.hydra] Mesh '/World/robot/r_bogie_link/visuals' has corrupted data in primvar 'st_5': buffer size 15768 doesn't match expected size 385806 in faceVarying primvars
+2025-01-13 11:56:24 [22,074ms] [Warning] [omni.hydra] Mesh '/World/robot/r_bogie_link/visuals' has corrupted data in primvar 'st_6': buffer size 4788 doesn't match expected size 385806 in faceVarying primvars
+2025-01-13 11:56:24 [22,075ms] [Warning] [omni.hydra] Mesh '/World/robot/r_bogie_link/visuals' has corrupted data in primvar 'st_8': buffer size 14886 doesn't match expected size 385806 in faceVarying primvars
+2025-01-13 11:56:24 [22,075ms] [Warning] [omni.hydra] Mesh '/World/robot/r_bogie_link/visuals' has corrupted data in primvar 'st_9': buffer size 26700 doesn't match expected size 385806 in faceVarying primvars
+2025-01-13 11:56:24 [22,075ms] [Warning] [omni.hydra] Mesh '/World/robot/r_bogie_link/visuals' has corrupted data in primvar 'st_10': buffer size 2856 doesn't match expected size 385806 in faceVarying primvars
+2025-01-13 11:56:24 [22,154ms] [Warning] [omni.hydra] Mesh '/World/robot/l_front_wheel/visuals' has corrupted data in primvar 'st_1': buffer size 24411 doesn't match expected size 121746 in faceVarying primvars
+2025-01-13 11:56:24 [22,154ms] [Warning] [omni.hydra] Mesh '/World/robot/l_front_wheel/visuals' has corrupted data in primvar 'st': buffer size 97335 doesn't match expected size 121746 in faceVarying primvars
+2025-01-13 11:56:24 [22,190ms] [Warning] [omni.hydra] Mesh '/World/robot/l_bogie_link/visuals' has corrupted data in primvar 'st_19': buffer size 14982 doesn't match expected size 363186 in faceVarying primvars
+2025-01-13 11:56:24 [22,190ms] [Warning] [omni.hydra] Mesh '/World/robot/l_bogie_link/visuals' has corrupted data in primvar 'st_18': buffer size 4731 doesn't match expected size 363186 in faceVarying primvars
+2025-01-13 11:56:24 [22,190ms] [Warning] [omni.hydra] Mesh '/World/robot/l_bogie_link/visuals' has corrupted data in primvar 'st_16': buffer size 25608 doesn't match expected size 363186 in faceVarying primvars
+2025-01-13 11:56:24 [22,190ms] [Warning] [omni.hydra] Mesh '/World/robot/l_bogie_link/visuals' has corrupted data in primvar 'st_15': buffer size 4332 doesn't match expected size 363186 in faceVarying primvars
+2025-01-13 11:56:24 [22,190ms] [Warning] [omni.hydra] Mesh '/World/robot/l_bogie_link/visuals' has corrupted data in primvar 'st_14': buffer size 4332 doesn't match expected size 363186 in faceVarying primvars
+2025-01-13 11:56:24 [22,190ms] [Warning] [omni.hydra] Mesh '/World/robot/l_bogie_link/visuals' has corrupted data in primvar 'st': buffer size 4731 doesn't match expected size 363186 in faceVarying primvars
+2025-01-13 11:56:24 [22,190ms] [Warning] [omni.hydra] Mesh '/World/robot/l_bogie_link/visuals' has corrupted data in primvar 'st_17': buffer size 41037 doesn't match expected size 363186 in faceVarying primvars
+2025-01-13 11:56:24 [22,190ms] [Warning] [omni.hydra] Mesh '/World/robot/l_bogie_link/visuals' has corrupted data in primvar 'st_7': buffer size 14943 doesn't match expected size 363186 in faceVarying primvars
+2025-01-13 11:56:24 [22,190ms] [Warning] [omni.hydra] Mesh '/World/robot/l_bogie_link/visuals' has corrupted data in primvar 'st_11': buffer size 25608 doesn't match expected size 363186 in faceVarying primvars
+2025-01-13 11:56:24 [22,190ms] [Warning] [omni.hydra] Mesh '/World/robot/l_bogie_link/visuals' has corrupted data in primvar 'st_2': buffer size 4644 doesn't match expected size 363186 in faceVarying primvars
+2025-01-13 11:56:24 [22,191ms] [Warning] [omni.hydra] Mesh '/World/robot/l_bogie_link/visuals' has corrupted data in primvar 'st_1': buffer size 15756 doesn't match expected size 363186 in faceVarying primvars
+2025-01-13 11:56:24 [22,191ms] [Warning] [omni.hydra] Mesh '/World/robot/l_bogie_link/visuals' has corrupted data in primvar 'st_12': buffer size 7701 doesn't match expected size 363186 in faceVarying primvars
+2025-01-13 11:56:24 [22,191ms] [Warning] [omni.hydra] Mesh '/World/robot/l_bogie_link/visuals' has corrupted data in primvar 'st_3': buffer size 27207 doesn't match expected size 363186 in faceVarying primvars
+2025-01-13 11:56:24 [22,191ms] [Warning] [omni.hydra] Mesh '/World/robot/l_bogie_link/visuals' has corrupted data in primvar 'st_13': buffer size 12555 doesn't match expected size 363186 in faceVarying primvars
+2025-01-13 11:56:24 [22,191ms] [Warning] [omni.hydra] Mesh '/World/robot/l_bogie_link/visuals' has corrupted data in primvar 'st_4': buffer size 15228 doesn't match expected size 363186 in faceVarying primvars
+2025-01-13 11:56:24 [22,191ms] [Warning] [omni.hydra] Mesh '/World/robot/l_bogie_link/visuals' has corrupted data in primvar 'st_5': buffer size 65898 doesn't match expected size 363186 in faceVarying primvars
+2025-01-13 11:56:24 [22,191ms] [Warning] [omni.hydra] Mesh '/World/robot/l_bogie_link/visuals' has corrupted data in primvar 'st_6': buffer size 24840 doesn't match expected size 363186 in faceVarying primvars
+2025-01-13 11:56:24 [22,191ms] [Warning] [omni.hydra] Mesh '/World/robot/l_bogie_link/visuals' has corrupted data in primvar 'st_8': buffer size 4644 doesn't match expected size 363186 in faceVarying primvars
+2025-01-13 11:56:24 [22,191ms] [Warning] [omni.hydra] Mesh '/World/robot/l_bogie_link/visuals' has corrupted data in primvar 'st_9': buffer size 17202 doesn't match expected size 363186 in faceVarying primvars
+2025-01-13 11:56:24 [22,191ms] [Warning] [omni.hydra] Mesh '/World/robot/l_bogie_link/visuals' has corrupted data in primvar 'st_10': buffer size 27207 doesn't match expected size 363186 in faceVarying primvars
+2025-01-13 11:56:24 [22,212ms] [Warning] [omni.hydra] Mesh '/World/robot/r_roll_static_link/visuals' has corrupted data in primvar 'st_6': buffer size 1458 doesn't match expected size 59766 in faceVarying primvars
+2025-01-13 11:56:24 [22,212ms] [Warning] [omni.hydra] Mesh '/World/robot/r_roll_static_link/visuals' has corrupted data in primvar 'st_5': buffer size 15720 doesn't match expected size 59766 in faceVarying primvars
+2025-01-13 11:56:24 [22,212ms] [Warning] [omni.hydra] Mesh '/World/robot/r_roll_static_link/visuals' has corrupted data in primvar 'st_4': buffer size 1458 doesn't match expected size 59766 in faceVarying primvars
+2025-01-13 11:56:24 [22,212ms] [Warning] [omni.hydra] Mesh '/World/robot/r_roll_static_link/visuals' has corrupted data in primvar 'st_3': buffer size 7140 doesn't match expected size 59766 in faceVarying primvars
+2025-01-13 11:56:24 [22,212ms] [Warning] [omni.hydra] Mesh '/World/robot/r_roll_static_link/visuals' has corrupted data in primvar 'st_2': buffer size 16728 doesn't match expected size 59766 in faceVarying primvars
+2025-01-13 11:56:24 [22,212ms] [Warning] [omni.hydra] Mesh '/World/robot/r_roll_static_link/visuals' has corrupted data in primvar 'st_1': buffer size 8064 doesn't match expected size 59766 in faceVarying primvars
+2025-01-13 11:56:24 [22,212ms] [Warning] [omni.hydra] Mesh '/World/robot/r_roll_static_link/visuals' has corrupted data in primvar 'st': buffer size 9198 doesn't match expected size 59766 in faceVarying primvars
+2025-01-13 11:56:24 [22,232ms] [Warning] [omni.hydra] Mesh '/World/robot/r_rear_wheel_rotate_link/visuals' has corrupted data in primvar 'st_15': buffer size 2433 doesn't match expected size 233679 in faceVarying primvars
+2025-01-13 11:56:24 [22,232ms] [Warning] [omni.hydra] Mesh '/World/robot/r_rear_wheel_rotate_link/visuals' has corrupted data in primvar 'st_14': buffer size 7059 doesn't match expected size 233679 in faceVarying primvars
+2025-01-13 11:56:24 [22,232ms] [Warning] [omni.hydra] Mesh '/World/robot/r_rear_wheel_rotate_link/visuals' has corrupted data in primvar 'st': buffer size 18885 doesn't match expected size 233679 in faceVarying primvars
+2025-01-13 11:56:24 [22,232ms] [Warning] [omni.hydra] Mesh '/World/robot/r_rear_wheel_rotate_link/visuals' has corrupted data in primvar 'st_7': buffer size 14718 doesn't match expected size 233679 in faceVarying primvars
+2025-01-13 11:56:24 [22,232ms] [Warning] [omni.hydra] Mesh '/World/robot/r_rear_wheel_rotate_link/visuals' has corrupted data in primvar 'st_11': buffer size 13302 doesn't match expected size 233679 in faceVarying primvars
+2025-01-13 11:56:24 [22,232ms] [Warning] [omni.hydra] Mesh '/World/robot/r_rear_wheel_rotate_link/visuals' has corrupted data in primvar 'st_2': buffer size 40758 doesn't match expected size 233679 in faceVarying primvars
+2025-01-13 11:56:24 [22,232ms] [Warning] [omni.hydra] Mesh '/World/robot/r_rear_wheel_rotate_link/visuals' has corrupted data in primvar 'st_1': buffer size 15714 doesn't match expected size 233679 in faceVarying primvars
+2025-01-13 11:56:24 [22,232ms] [Warning] [omni.hydra] Mesh '/World/robot/r_rear_wheel_rotate_link/visuals' has corrupted data in primvar 'st_12': buffer size 1572 doesn't match expected size 233679 in faceVarying primvars
+2025-01-13 11:56:24 [22,232ms] [Warning] [omni.hydra] Mesh '/World/robot/r_rear_wheel_rotate_link/visuals' has corrupted data in primvar 'st_3': buffer size 13470 doesn't match expected size 233679 in faceVarying primvars
+2025-01-13 11:56:24 [22,233ms] [Warning] [omni.hydra] Mesh '/World/robot/r_rear_wheel_rotate_link/visuals' has corrupted data in primvar 'st_13': buffer size 21891 doesn't match expected size 233679 in faceVarying primvars
+2025-01-13 11:56:24 [22,233ms] [Warning] [omni.hydra] Mesh '/World/robot/r_rear_wheel_rotate_link/visuals' has corrupted data in primvar 'st_4': buffer size 17268 doesn't match expected size 233679 in faceVarying primvars
+2025-01-13 11:56:24 [22,233ms] [Warning] [omni.hydra] Mesh '/World/robot/r_rear_wheel_rotate_link/visuals' has corrupted data in primvar 'st_5': buffer size 17268 doesn't match expected size 233679 in faceVarying primvars
+2025-01-13 11:56:24 [22,233ms] [Warning] [omni.hydra] Mesh '/World/robot/r_rear_wheel_rotate_link/visuals' has corrupted data in primvar 'st_6': buffer size 17052 doesn't match expected size 233679 in faceVarying primvars
+2025-01-13 11:56:24 [22,233ms] [Warning] [omni.hydra] Mesh '/World/robot/r_rear_wheel_rotate_link/visuals' has corrupted data in primvar 'st_8': buffer size 7059 doesn't match expected size 233679 in faceVarying primvars
+2025-01-13 11:56:24 [22,233ms] [Warning] [omni.hydra] Mesh '/World/robot/r_rear_wheel_rotate_link/visuals' has corrupted data in primvar 'st_9': buffer size 13689 doesn't match expected size 233679 in faceVarying primvars
+2025-01-13 11:56:24 [22,233ms] [Warning] [omni.hydra] Mesh '/World/robot/r_rear_wheel_rotate_link/visuals' has corrupted data in primvar 'st_10': buffer size 11541 doesn't match expected size 233679 in faceVarying primvars
+2025-01-13 11:56:24 [22,305ms] [Warning] [omni.hydra] Mesh '/World/robot/r_rear_wheel/visuals' has corrupted data in primvar 'st_1': buffer size 97446 doesn't match expected size 121842 in faceVarying primvars
+2025-01-13 11:56:24 [22,305ms] [Warning] [omni.hydra] Mesh '/World/robot/r_rear_wheel/visuals' has corrupted data in primvar 'st': buffer size 24396 doesn't match expected size 121842 in faceVarying primvars
+2025-01-13 11:56:25 [22,342ms] [Warning] [omni.hydra] Mesh '/World/robot/r_front_wheel_rotate_link/visuals' has corrupted data in primvar 'st_15': buffer size 2433 doesn't match expected size 233679 in faceVarying primvars
+2025-01-13 11:56:25 [22,343ms] [Warning] [omni.hydra] Mesh '/World/robot/r_front_wheel_rotate_link/visuals' has corrupted data in primvar 'st_14': buffer size 7059 doesn't match expected size 233679 in faceVarying primvars
+2025-01-13 11:56:25 [22,343ms] [Warning] [omni.hydra] Mesh '/World/robot/r_front_wheel_rotate_link/visuals' has corrupted data in primvar 'st': buffer size 18885 doesn't match expected size 233679 in faceVarying primvars
+2025-01-13 11:56:25 [22,343ms] [Warning] [omni.hydra] Mesh '/World/robot/r_front_wheel_rotate_link/visuals' has corrupted data in primvar 'st_7': buffer size 14718 doesn't match expected size 233679 in faceVarying primvars
+2025-01-13 11:56:25 [22,343ms] [Warning] [omni.hydra] Mesh '/World/robot/r_front_wheel_rotate_link/visuals' has corrupted data in primvar 'st_11': buffer size 13302 doesn't match expected size 233679 in faceVarying primvars
+2025-01-13 11:56:25 [22,343ms] [Warning] [omni.hydra] Mesh '/World/robot/r_front_wheel_rotate_link/visuals' has corrupted data in primvar 'st_2': buffer size 40758 doesn't match expected size 233679 in faceVarying primvars
+2025-01-13 11:56:25 [22,343ms] [Warning] [omni.hydra] Mesh '/World/robot/r_front_wheel_rotate_link/visuals' has corrupted data in primvar 'st_1': buffer size 15714 doesn't match expected size 233679 in faceVarying primvars
+2025-01-13 11:56:25 [22,343ms] [Warning] [omni.hydra] Mesh '/World/robot/r_front_wheel_rotate_link/visuals' has corrupted data in primvar 'st_12': buffer size 1572 doesn't match expected size 233679 in faceVarying primvars
+2025-01-13 11:56:25 [22,343ms] [Warning] [omni.hydra] Mesh '/World/robot/r_front_wheel_rotate_link/visuals' has corrupted data in primvar 'st_3': buffer size 13470 doesn't match expected size 233679 in faceVarying primvars
+2025-01-13 11:56:25 [22,343ms] [Warning] [omni.hydra] Mesh '/World/robot/r_front_wheel_rotate_link/visuals' has corrupted data in primvar 'st_13': buffer size 21891 doesn't match expected size 233679 in faceVarying primvars
+2025-01-13 11:56:25 [22,343ms] [Warning] [omni.hydra] Mesh '/World/robot/r_front_wheel_rotate_link/visuals' has corrupted data in primvar 'st_4': buffer size 17268 doesn't match expected size 233679 in faceVarying primvars
+2025-01-13 11:56:25 [22,343ms] [Warning] [omni.hydra] Mesh '/World/robot/r_front_wheel_rotate_link/visuals' has corrupted data in primvar 'st_5': buffer size 17268 doesn't match expected size 233679 in faceVarying primvars
+2025-01-13 11:56:25 [22,343ms] [Warning] [omni.hydra] Mesh '/World/robot/r_front_wheel_rotate_link/visuals' has corrupted data in primvar 'st_6': buffer size 17052 doesn't match expected size 233679 in faceVarying primvars
+2025-01-13 11:56:25 [22,343ms] [Warning] [omni.hydra] Mesh '/World/robot/r_front_wheel_rotate_link/visuals' has corrupted data in primvar 'st_8': buffer size 7059 doesn't match expected size 233679 in faceVarying primvars
+2025-01-13 11:56:25 [22,343ms] [Warning] [omni.hydra] Mesh '/World/robot/r_front_wheel_rotate_link/visuals' has corrupted data in primvar 'st_9': buffer size 13689 doesn't match expected size 233679 in faceVarying primvars
+2025-01-13 11:56:25 [22,343ms] [Warning] [omni.hydra] Mesh '/World/robot/r_front_wheel_rotate_link/visuals' has corrupted data in primvar 'st_10': buffer size 11541 doesn't match expected size 233679 in faceVarying primvars
+2025-01-13 11:56:25 [22,447ms] [Warning] [omni.hydra] Mesh '/World/robot/r_front_wheel/visuals' has corrupted data in primvar 'st_1': buffer size 97446 doesn't match expected size 121842 in faceVarying primvars
+2025-01-13 11:56:25 [22,447ms] [Warning] [omni.hydra] Mesh '/World/robot/r_front_wheel/visuals' has corrupted data in primvar 'st': buffer size 24396 doesn't match expected size 121842 in faceVarying primvars
+2025-01-13 11:56:31 [29,036ms] [Warning] [carb.windowing-glfw.plugin] GLFW initialization failed.
+2025-01-13 11:56:31 [29,036ms] [Warning] [carb] Failed to startup plugin carb.windowing-glfw.plugin (interfaces: [carb::windowing::IGLContext v1.0],[carb::windowing::IWindowing v1.4]) (impl: carb.windowing-glfw.plugin)
+2025-01-13 11:56:36 [33,559ms] [Warning] [omni.timeline.plugin] Deprecated: direct use of ITimeline callbacks is deprecated. Use ITimeline::getTimeline (Python: omni.timeline.get_timeline_interface) instead.
+2025-01-13 11:56:36 [33,646ms] [Warning] [carb.windowing-glfw.plugin] GLFW initialization failed.
+2025-01-13 11:56:36 [33,646ms] [Warning] [carb] Failed to startup plugin carb.windowing-glfw.plugin (interfaces: [carb::windowing::IGLContext v1.0],[carb::windowing::IWindowing v1.4]) (impl: carb.windowing-glfw.plugin)
+2025-01-13 11:56:41 [38,811ms] [Warning] [rtx.rtxsensor.plugin] Using User-specified coordinate frame quaternion (0.000000, 0.000000, 0.000000, 1.000000) in RTXSensor
+2025-01-13 11:56:41 [39,246ms] [Warning] [carb.windowing-glfw.plugin] GLFW initialization failed.
+2025-01-13 11:56:41 [39,246ms] [Warning] [carb] Failed to startup plugin carb.windowing-glfw.plugin (interfaces: [carb::windowing::IGLContext v1.0],[carb::windowing::IWindowing v1.4]) (impl: carb.windowing-glfw.plugin)
+2025-01-13 11:56:43 [41,013ms] [Warning] [carb] Plugin interface for a client: omni.hydratexture.plugin was already released.
+2025-01-13 11:56:43 [41,013ms] [Warning] [omni.usd] Unexpected reference count of 2 for UsdStage 'anon:0x39d97ea0:World0.usd' while being closed in UsdContext (this may indicate it is still resident in memory).
+[41.331s] Simulation App Shutting Down
