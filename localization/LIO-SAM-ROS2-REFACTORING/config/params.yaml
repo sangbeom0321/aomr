@@ -1,0 +1,87 @@
+/**:
+  ros__parameters:
+    # Topics
+    pointCloudTopic: "/points_modified"          # Point cloud data
+    imuTopic: "/imu_raw"                        # IMU data
+    odomTopic: "odometry/imu"                    # IMU pre-preintegration odometry, same frequency as IMU
+    gpsTopic: "odometry/gpsz"                    # GPS odometry topic from navsat, see module_navsat.launch file
+    navFixTopic: "/fix"
+
+    # Frames
+    lidarFrame: "lidar_link"
+    baselinkFrame: "base_footprint"
+    odometryFrame: "odom"
+    mapFrame: "map"
+
+    # GPS Settings
+    useGpsElevation: false                       # if GPS elevation is bad, set to "false"
+    gpsCovThreshold: 2.0                         # m^2, threshold for using GPS data
+    poseCovThreshold: 25.0                       # m^2, threshold for using GPS data
+
+    # Export settings
+    savePCD: false                               # https://github.com/TixiaoShan/LIO-SAM/issues/3
+    savePCDDirectory: "/map/"                    # in your home folder, starts and ends with "/". Warning: the code deletes "LOAM" folder then recreates it. See "mapOptimization" for implementation
+
+    # SaveMap
+    defaultMapInfo: true
+    keyframeCloud: true
+    keyframeGPS: true
+
+    # Sensor Settings
+    sensor: ouster                            # lidar sensor type, 'velodyne' or 'ouster' or 'livox'
+    N_SCAN: 128                                  # number of lidar channel (i.e., Velodyne/Ouster: 16, 32, 64, 128, Livox Horizon: 6)
+    Horizon_SCAN: 1024                          # lidar horizontal resolution (Velodyne:1800, Ouster:512,1024,2048, Livox Horizon: 4000)
+    downsampleRate: 1                           # default: 1. Downsample your data if too many points. i.e., 16 = 64 / 4, 16 = 16 / 1
+    lidarMinRange: 0.0                          # default: 1.0, minimum lidar range to be used
+    lidarMaxRange: 1000.0                        # default: 1000.0, maximum lidar range to be used
+
+
+    # IMU Settings
+    imuAccNoise: 0.0014807241097940828 #0.002
+    imuGyrNoise: 0.00018374638092929994 #1.5636343949698187e-03
+    imuAccBiasN: 0.0001086369975568063 # 0.03
+    imuGyrBiasN: 6.824629184710982e-06 #3.5640318696367613e-05
+    imuGravityAccelAdjustment: true # Gravity-based acceleration compensation # it needs 8-Axis or 9-Axis IMU
+    imuRate: 100.0
+    imuPriorAcc: [0.0, 0.0, 0.0]
+    imuPriorGyr: [0.0, 0.0, 0.0]
+    imuType : 8
+    # 6-axis(linear acceleration, angular velocity) IMU : 6
+    # 8-axis(+ roll pitch) IMU : 8
+    # 9-axis(+ roll pitch yaw) IMU : 9
+
+    imuGravity: -9.81
+    useImuRPYWeight : false # need 8-Axis or 9-Axis IMU
+    imuRPYWeight: 0.1
+
+    extrinsicTrans:  [-0.3212, 0.0, -0.7895]
+    extrinsicRot:     [1.0, 0.0, 0.0,
+                       0.0, 1.0, 0.0,
+                       0.0, 0.0, 1.0 ]
+    extrinsicRPY: [ 1.0,  0.0,  0.0,
+                    0.0,  1.0,  0.0,
+                    0.0,  0.0,  1.0 ]
+
+    # LOAM feature threshold
+    edgeThreshold: 1.0
+    surfThreshold: 0.1
+
+
+    edgeFeatureMinValidNum: 10
+    surfFeatureMinValidNum: 100
+
+    # voxel filter paprams
+    odometrySurfLeafSize: 0.4                    # default: 0.4 - outdoor, 0.2 - indoor
+    mappingCornerLeafSize: 0.2                    # default: 0.2 - outdoor, 0.1 - indoor
+    mappingSurfLeafSize: 0.4                      # default: 0.4 - outdoor, 0.2 - indoor
+
+    # CPU Params
+    numberOfCores: 2                              # number of cores for mapping optimization
+    mappingProcessInterval: 0.01                  # seconds, regulate mapping frequency
+
+    # Surrounding map
+    surroundingkeyframeAddingDistThreshold: 1.0   # meters, regulate keyframe adding threshold
+    surroundingkeyframeAddingAngleThreshold: 0.4  # radians, regulate keyframe adding threshold // default value : 0.2
+    surroundingKeyframeDensity: 2.0               # meters, downsample surrounding keyframe poses
+    surroundingKeyframeSearchRadius: 50.0         # meters, within n meters scan-to-map optimization
+    # (when loop closure disabled)
