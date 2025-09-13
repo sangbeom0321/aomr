@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  ros2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        UID: ${UID:-1000}
+        GID: ${GID:-1000}
+        USERNAME: ${USER:-dev}
+    image: aomr/ros2-humble:latest
+    container_name: ros2-humble-dev
+    network_mode: host
+    ipc: host
+    environment:
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+      - RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+    volumes:
+      - ./:/workspace:rw
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+    user: "${UID:-1000}:${GID:-1000}"
+    privileged: false
+    command: bash
+
+
