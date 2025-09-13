@@ -1,91 +1,91 @@
-# ROS 2 Humble 개발 컨테이너 (Ubuntu 22.04)
+# AOMR (ROS 2 Humble Workspace)
 
-Ubuntu 22.04 베이스에 ROS 2 Humble + 개발 도구(git, terminator, gedit, nano 등)를 포함한 Docker 환경입니다. `docker compose` 한 번으로 실행하며 X11 포워딩으로 GUI 앱(RViz2, gedit, terminator 등)도 사용할 수 있습니다.
+This repository is a ROS 2 Humble workspace for an autonomous mobile robot stack used in orchard environments (AOMR). It contains four-wheel steering control, LiDAR odometry and localization (LIO-SAM), waypoint/arm following utilities, simulation tools, and assorted helpers. A ready-to-use Docker environment (Ubuntu 22.04 + ROS 2 Humble) is provided for development with GUI support.
 
-## 포함 사항
-- Ubuntu 22.04 + ROS 2 Humble (desktop)
-- 기본 개발 도구: git, build-essential, cmake, nano, gedit, terminator, bash-completion 등
-- colcon 확장: `python3-colcon-common-extensions`
-- rosdep / vcstool 사전 설치
-- 비루트 사용자 생성(기본: dev) + 호스트 UID/GID 매핑
-- X11 GUI 지원(RViz2, gedit 등)
+## Repository Layout (high level)
+- `control/control_4ws/control_4ws`: Four-wheel steering control (C++), depends on `rclcpp`, `std_msgs`, `sensor_msgs`.
+- `localization/LIO-SAM-ROS2-REFACTORING`: LIO-SAM port/refactor to ROS 2 (`lio_sam`), LiDAR Odometry using PCL, GTSAM, Eigen.
+- `localization/LIO-SAM-LOC-ROS2-REFACTORING`: LIO-SAM localization-only variant (`lio_sam_loc`).
+- `localization/robot_localization`: Third-party package for nonlinear state estimation via sensor fusion (Apache 2.0).
+- `waypoint_arm_following/interface_rb10_apple`: ROS 2 interface package (actions/messages) for RB10 manipulator integration.
+- `waypoint_arm_following/goal_pose_manager`: Goal management utilities using `rclcpp_action`, `nav2_msgs`, `nav_msgs`, `geometry_msgs`.
+- `waypoint_arm_following/pkg_rb10_apple`: Python nodes using the above interfaces/utilities.
+- `utils/kimm_orchard`: Gazebo-based orchard world, keyboard teleop, and related tools.
+- `utils/Isaac_ml`: Isaac Sim-based integration (WIP).
+- `utils/pcd_cal`: Example for integrating PCL in ROS 2.
+- `utils/pointcloud_crop`: Point cloud cropping utilities.
 
-## 사전 준비
-- Docker(=20.10+) 및 Docker Compose v2 설치
-- X11 접근 허용 (한 번만 실행)
+> Note: Many subpackages have placeholder descriptions; see each `package.xml` and source for details.
 
+## Quick Start (Docker)
+The repository includes a development container with Ubuntu 22.04 + ROS 2 Humble, preinstalled tools (git, colcon, rosdep, vcstool, terminator, gedit, nano), and X11 GUI support.
+
+1) Allow local X11 access (once per host session):
 ```bash
-xhost +local:  # 보안 이슈가 있을 수 있으니 신뢰되는 로컬 사용자만 허용된 환경에서 사용하세요.
+xhost +local:
 ```
 
-Wayland 세션에서도 X11 소켓(`/tmp/.X11-unix`)을 통해 동작합니다. 문제가 있으면 로그인 화면에서 Xorg 세션으로 변경해 테스트해 보세요.
-
-## 빌드
-환경 변수를 호스트의 UID/GID로 설정하면 컨테이너 안에서 생성되는 파일의 소유권이 올바르게 매핑됩니다.
-
+2) Build the image (use your host UID/GID to match file ownership):
 ```bash
 export UID=$(id -u)
 export GID=$(id -g)
-# 옵션: 사용자명 지정 (기본: 현재 사용자명)
 export USER=${USER}
-
-# 이미지 빌드
 docker compose build
-# (또는 구버전 CLI)
-# docker-compose build
 ```
 
-## 실행
+3) Run and attach a shell:
 ```bash
-# 백그라운드 실행
 docker compose up -d
-
-# 셸 접속
 docker compose exec ros2 bash
-
-# (구버전)
-# docker-compose up -d
-# docker-compose exec ros2 bash
 ```
 
-컨테이너는 host 네트워크/IPC를 사용하므로 ROS 2 DDS 디스커버리가 원활합니다. GUI 앱 실행을 위해 X11 소켓과 DISPLAY가 전달됩니다.
+Inside the container, ROS 2 is sourced automatically. The repository root is mounted at `/workspace`.
 
-## 사용 예시
-컨테이너 내부 셸에서 다음 명령을 실행해 보세요.
-
+## Build (colcon)
+From inside the container shell (or a native Humble setup):
 ```bash
-# ROS 2 토픽 확인
-ros2 topic list
+rosdep update
+rosdep install --from-paths . --ignore-src -r -y
+colcon build --symlink-install
+source install/setup.bash
+```
 
-# 데모 노드 실행
+## Examples
+- Verify ROS 2:
+```bash
+ros2 topic list
 ros2 run demo_nodes_cpp talker &
 ros2 run demo_nodes_cpp listener &
-
-# RViz2 실행 (GUI)
-rviz2
 ```
 
-작업공간은 컨테이너의 `/workspace`에 호스트의 현재 디렉토리가 마운트됩니다. 기존 ROS 2 워크스페이스가 있다면 빌드 후 `install/setup.bash`가 자동 소싱됩니다.
-
-## 재빌드/정리
+- LIO-SAM (mapping) and localization (launch files exist under each package's `launch/`):
 ```bash
-# Dockerfile 변경 반영
-docker compose build --no-cache
-
-# 컨테이너/네트워크 중지 및 삭제
-docker compose down
-
-# 이미지 삭제(원할 경우)
-docker rmi aomr/ros2-humble:latest || true
+ros2 launch lio_sam run.launch.py      # mapping (package: lio_sam)
+ros2 launch lio_sam_loc run.launch.py  # localization (package: lio_sam_loc)
 ```
 
-## 문제 해결
-- DISPLAY/X11 이슈: `echo $DISPLAY` 가 비어 있지 않은지 확인하고 `xhost +local:` 실행 여부를 점검하세요.
-- 권한 이슈: `export UID=$(id -u); export GID=$(id -g)` 후 다시 `docker compose build` 하세요.
-- 네트워킹 이슈: 컨테이너가 `network_mode: host` 를 사용하므로 방화벽 규칙을 확인하세요.
+- Gazebo orchard simulation and teleop (from `utils/kimm_orchard`):
+```bash
+ros2 launch kimm_orchard gazebo.launch.py
+ros2 run kimm_orchard keyboard_teleop.py
+```
 
-## 구성 파일
-- `Dockerfile`: Ubuntu 22.04 + ROS 2 Humble + 개발 도구 설치, 비루트 사용자 생성
-- `entrypoint.sh`: ROS/rosdep 초기화 및 워크스페이스/GUI 환경 설정
-- `docker-compose.yml`: 호스트 UID/GID/X11/네트워킹 매핑 설정
-- `.dockerignore`: 빌드 컨텍스트 최소화
+- Robot localization: see `localization/robot_localization/launch/` for ready-made launch files.
+
+## Troubleshooting
+- GUI/X11: Ensure `$DISPLAY` is set on the host and run `xhost +local:`. Wayland sessions may need Xorg fallback.
+- Permissions: Rebuild with your host UID/GID exported before `docker compose build`.
+- Networking: The container uses host networking for DDS discovery. Check local firewall rules if discovery fails.
+
+## Development Container Files
+- `Dockerfile`: Ubuntu 22.04 + ROS 2 Humble desktop, dev tools, non-root user, ROS env.
+- `entrypoint.sh`: Sources ROS, initializes/updates rosdep, sets GUI env, overlays `/workspace` if built.
+- `docker-compose.yml`: Host networking, X11 passthrough, UID/GID mapping, workspace mount.
+- `.dockerignore`: Minimizes build context.
+
+## License
+This repository aggregates multiple packages with different licenses. Refer to each subpackage's `package.xml` and `LICENSE` (where present). `robot_localization` is Apache 2.0; LIO-SAM is originally by Tixiao Shan (see upstream license and attribution).
+
+## Acknowledgements
+- LIO-SAM by Tixiao Shan and contributors.
+- robot_localization by Tom Moore, Steve Macenski, and contributors.
