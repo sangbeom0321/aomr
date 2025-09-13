@@ -12,8 +12,10 @@ if [ ! -f /etc/ros/rosdep/sources.list.d/20-default.list ]; then
 fi
 rosdep update || true
 
-# Source workspace overlay if present
-if [ -f /workspace/install/setup.bash ]; then
+# Source workspace overlays (prefer /root/ros2_ws if present)
+if [ -f /root/ros2_ws/install/setup.bash ]; then
+  source /root/ros2_ws/install/setup.bash
+elif [ -f /workspace/install/setup.bash ]; then
   source /workspace/install/setup.bash
 fi
 

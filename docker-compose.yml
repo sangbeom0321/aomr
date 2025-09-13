@@ -16,9 +16,10 @@ services:
       - QT_X11_NO_MITSHM=1
       - RMW_IMPLEMENTATION=rmw_fastrtps_cpp
     volumes:
-      - ./:/workspace:rw
+      - ./:/root/ros2_ws/src:rw
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
-    user: "${UID:-1000}:${GID:-1000}"
+    user: "0:0"
+    working_dir: /root
     privileged: false
     tty: true
     stdin_open: true
