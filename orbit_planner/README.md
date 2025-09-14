@@ -1,205 +1,373 @@
 # Orbit Planner Package
 
-ROS2 패키지로 과수원 환경에서의 자율 탐사를 위한 궤도 계획 시스템입니다.
+A ROS2 package for autonomous exploration and monitoring in orchard environments using orbit-based navigation strategies.
 
-## 개요
+## Overview
 
-Orbit Planner는 Voxblox 매핑과 프론티어 기반 탐사를 사용하여 과수원 환경에서 자율적으로 탐사 경로를 생성하는 시스템입니다. 이 패키지는 LIO-SAM SLAM 시스템과 4륜 조향 제어 시스템과 통합되어 작동합니다.
+Orbit Planner is an autonomous exploration system designed specifically for orchard environments. It combines frontier-based exploration with tree row detection and orbit-based monitoring to ensure systematic coverage of orchard rows. The system integrates with LIO-SAM SLAM and 4-wheel steering control systems for complete autonomous operation.
 
-## 주요 기능
+## Key Features
 
-### 핵심 기능
-- **Voxblox 통합**: TSDF/ESDF 매핑을 통한 실시간 3D 환경 표현
-- **프론티어 탐사**: 미지 영역의 경계를 찾아 효율적인 탐사 목표 생성
-- **고급 경로 계획**: A*, RRT*, Voronoi 기반의 다중 알고리즘 경로 계획
-- **RViz2 통합**: 사용자 친화적인 GUI를 통한 탐사 영역 정의 및 모니터링
-- **실시간 성능**: 온보드 컴퓨터에서 실시간으로 작동
+### Core Capabilities
+- **Tree Clustering & Row Detection**: PCL-based point cloud clustering with PCA for tree row orientation
+- **Frontier-based Exploration**: Automatic detection of unexplored area boundaries
+- **Orbit Anchor Generation**: 4-anchor system (Front, Back, Left, Right) for systematic row monitoring
+- **Path Planning**: A* algorithm with ESDF-based collision avoidance
+- **RViz2 Integration**: Interactive GUI for exploration area selection and monitoring
+- **Real-time Performance**: Multi-threaded architecture for onboard operation
 
-### 과수원 특화 기능
-- **나무 감지**: 포인트 클라우드에서 개별 나무 식별 및 위치 추정
-- **열 감지**: 과수원의 열 구조 자동 인식 및 분석
-- **체계적 탐사**: 열별, 나선형, 지그재그 등 다양한 탐사 패턴 지원
-- **적응형 계획**: 환경 구조에 따른 자동 탐사 전략 조정
+### Orchard-Specific Features
+- **Tree Detection**: Individual tree identification and position estimation from point clouds
+- **Row Structure Analysis**: Automatic recognition and analysis of orchard row patterns
+- **Systematic Monitoring**: Row-by-row coverage with minimal blind spots
+- **Adaptive Planning**: Dynamic strategy adjustment based on environmental structure
 
-### 고급 기능
-- **학습 기반 탐사**: 강화학습을 통한 경험 기반 탐사 전략
-- **성능 최적화**: 멀티스레딩, 캐싱, 적응형 업데이트율
-- **실시간 모니터링**: 탐사 진행률, 성능 메트릭, 학습 상태 추적
-- **확장 가능한 아키텍처**: 모듈화된 설계로 쉬운 기능 확장
+### Advanced Features
+- **Voxblox Integration**: TSDF/ESDF mapping for real-time 3D environment representation
+- **TSP Scheduling**: Traveling Salesman Problem optimization for efficient anchor sequencing
+- **Receding Horizon Planning**: Short-term sequence evaluation for adaptive exploration
+- **Multi-threaded Architecture**: Parallel processing for real-time performance
 
-## 시스템 아키텍처
+## System Architecture
 
-### 주요 구성 요소
+### Core Components
 
-1. **orbit_planner_node**: 핵심 탐사 로직을 담당하는 메인 노드
-2. **orbit_voxblox_interface**: Voxblox 라이브러리와의 인터페이스
-3. **orbit_panel_plugin**: RViz2 패널 플러그인
+1. **orbit_planner_node**: Main planner node handling exploration logic
+2. **orbit_voxblox_interface**: Voxblox library interface for TSDF/ESDF mapping
+3. **tree_clusterer**: Tree detection and row structure analysis
+4. **frontier_detector**: Unexplored area boundary detection
+5. **path_planner**: A* path planning with collision avoidance
+6. **orbit_anchor_generator**: 4-anchor generation for systematic monitoring
+7. **orbit_panel_plugin**: RViz2 panel plugin for interactive control
 
-### 데이터 흐름
+### Data Flow
 
 ```
 LIO-SAM → Voxblox Interface → Planner Node → Control System
     ↓              ↓              ↓
-Point Cloud → TSDF/ESDF → Frontier Detection → Path Planning
+Point Cloud → TSDF/ESDF → Tree Detection → Row Analysis
+    ↓              ↓              ↓
+Occupancy Grid → Frontier Detection → Anchor Generation
+    ↓              ↓              ↓
+Path Planning → TSP Scheduling → Trajectory Execution
 ```
 
-## 설치 및 빌드
+## Installation and Build
 
-### 의존성
+### Dependencies
 
+- **ROS2 Humble**
+- **Voxblox**: TSDF/ESDF mapping library
+- **PCL**: Point Cloud Library for 3D processing
+- **RViz2**: Visualization tools
+- **Eigen3**: Linear algebra library
+- **OpenCV**: Computer vision library (optional)
+- **tf2**: Transform library
+
+### System Requirements
+
+- Ubuntu 22.04 LTS
 - ROS2 Humble
-- Voxblox (TSDF/ESDF 매핑)
-- PCL (포인트 클라우드 처리)
-- RViz2
-- Eigen3
+- Minimum 8GB RAM
+- NVIDIA GPU (recommended for Voxblox)
 
-### 빌드
+### Installation
 
+1. **Install ROS2 Humble** (if not already installed):
 ```bash
-# 워크스페이스로 이동
-cd your_ros2_workspace
+sudo apt update
+sudo apt install ros-humble-desktop
+```
 
-# 패키지 빌드
+2. **Install dependencies**:
+```bash
+sudo apt install ros-humble-pcl-ros ros-humble-pcl-conversions
+sudo apt install ros-humble-rviz2 ros-humble-tf2-eigen
+sudo apt install libpcl-dev libeigen3-dev libopencv-dev
+```
+
+3. **Clone and build**:
+```bash
+# Navigate to your ROS2 workspace
+cd ~/ros2_ws
+
+# Clone the package (if using git)
+# git clone <repository_url> src/aomr/orbit_planner
+
+# Build the package
 colcon build --packages-select orbit_planner
 
-# 환경 설정
+# Source the workspace
 source install/setup.bash
 ```
 
-## 사용법
+## Usage
 
-### 기본 실행
+### Quick Start
 
 ```bash
-# 전체 시스템 실행
+# Launch the complete system
 ros2 launch orbit_planner orbit_exploration.launch.py
 
-# RViz 없이 실행
+# Launch without RViz2
 ros2 launch orbit_planner orbit_exploration.launch.py use_rviz:=false
 ```
 
-### 개별 노드 실행
+### Individual Node Execution
 
 ```bash
-# Voxblox 인터페이스만 실행
-ros2 run orbit_planner orbit_voxblox_interface
-
-# 플래너 노드만 실행
+# Run only the planner node
 ros2 run orbit_planner orbit_planner_node
+
+# Run with custom parameters
+ros2 run orbit_planner orbit_planner_node --ros-args -p robot_radius:=0.5 -p max_planning_distance:=100.0
 ```
 
-### RViz2에서 패널 사용
+### RViz2 Panel Usage
 
-1. RViz2 실행
-2. 패널 추가: `Panels` → `Add New Panel` → `Orbit Planner Panel`
-3. 탐사 영역 정의:
-   - "Select Start Point" 버튼으로 시작점 선택
-   - "Start Polygon Mode" 버튼으로 다각형 모드 활성화
-   - 지도에서 클릭하여 탐사 영역 정의
-4. "Start Exploration" 버튼으로 탐사 시작
-
-## 설정
-
-### 매개변수 설정
-
-주요 매개변수는 `config/orbit_planner_params.yaml`에서 설정할 수 있습니다:
-
-```yaml
-# 로봇 반지름 (미터)
-robot_radius: 0.4
-
-# 목표 허용 오차 (미터)
-goal_tolerance: 1.0
-
-# 탐사 속도 (Hz)
-exploration_rate: 1.0
-
-# 최대 계획 거리 (미터)
-max_planning_distance: 50.0
-```
-
-### 토픽 리매핑
-
-다른 SLAM 시스템과 통합하려면 토픽을 리매핑하세요:
-
+1. **Launch RViz2**:
 ```bash
-ros2 launch orbit_planner orbit_exploration.launch.py \
-  --ros-args -r /lio_sam/mapping/cloudRegistered:=/your_pointcloud_topic
+ros2 run rviz2 rviz2 -d src/aomr/orbit_planner/rviz/orbit_planner.rviz
 ```
 
-## API
+2. **Add the Orbit Planner Panel**:
+   - Go to `Panels` → `Add New Panel` → `Orbit Planner Panel`
+   - The panel will appear on the right side of RViz2
 
-### 서비스
+3. **Define Exploration Area**:
+   - Click "Start Point" to select the robot's starting position
+   - Click "Add Polygon Point" to enter polygon mode
+   - Click on the map to define exploration boundaries
+   - Click "Clear Polygon" to reset the area
 
-- `/orbit_planner/start_exploration`: 탐사 시작
-- `/orbit_planner/stop_exploration`: 탐사 중지
+4. **Start Exploration**:
+   - Click "Start Exploration" to begin autonomous exploration
+   - Monitor progress in the status panel
+   - Click "Stop Exploration" to halt the system
 
-### 토픽
+### Testing the System
 
-- `/orbit_planner/trajectory`: 계획된 경로 (nav_msgs/Path)
-- `/orbit_planner/goal`: 현재 탐사 목표 (geometry_msgs/PoseStamped)
-- `/orbit_planner/markers`: 시각화 마커 (visualization_msgs/MarkerArray)
-- `/orbit_planner/occupancy_grid`: 점유 격자 (nav_msgs/OccupancyGrid)
-
-## 개발자 가이드
-
-### 코드 구조
-
-```
-orbit_planner/
-├── src/                    # 소스 코드
-│   ├── orbit_planner_node.cpp
-│   ├── orbit_voxblox_interface.cpp
-│   └── orbit_panel_plugin.cpp
-├── include/orbit_planner/  # 헤더 파일
-├── launch/                 # 런치 파일
-├── config/                 # 설정 파일
-└── rviz/                   # RViz 설정
-```
-
-### 새로운 기능 추가
-
-1. 헤더 파일에 인터페이스 정의
-2. 소스 파일에 구현
-3. CMakeLists.txt에 빌드 설정 추가
-4. 설정 파일에 매개변수 추가
-
-## 문제 해결
-
-### 일반적인 문제
-
-1. **Voxblox 컴파일 오류**: Eigen3 의존성 확인
-2. **RViz 플러그인 로드 실패**: 패키지 빌드 후 환경 설정 확인
-3. **메모리 부족**: voxel_size 매개변수 조정
-
-### 디버깅
-
+#### 1. **Unit Tests**
 ```bash
-# 로그 레벨 설정
-export RCUTILS_LOGGING_SEVERITY_THRESHOLD=DEBUG
+# Run all tests
+colcon test --packages-select orbit_planner
 
-# 특정 노드 디버깅
+# Run specific test
+ros2 test src/aomr/orbit_planner/test/test_orbit_planner.cpp
+```
+
+#### 2. **Simulation Testing**
+```bash
+# Launch with simulation data
+ros2 launch orbit_planner orbit_exploration.launch.py use_sim_time:=true
+
+# Test with bag file
+ros2 bag play your_data.bag
+```
+
+#### 3. **Visualization Testing**
+```bash
+# Check if all markers are published
+ros2 topic list | grep orbit_planner
+
+# Monitor specific topics
+ros2 topic echo /orbit_planner/frontiers
+ros2 topic echo /orbit_planner/orbit_anchors
+ros2 topic echo /orbit_planner/trajectory
+```
+
+#### 4. **Performance Testing**
+```bash
+# Monitor CPU usage
+htop
+
+# Check memory usage
 ros2 run orbit_planner orbit_planner_node --ros-args --log-level debug
 ```
 
-## 라이선스
+## Configuration
+
+### Parameter Settings
+
+Key parameters can be configured in `config/orbit_planner_params.yaml`:
+
+```yaml
+# Robot parameters
+robot_radius: 0.4
+safety_margin: 0.1
+
+# Exploration parameters
+max_planning_distance: 50.0
+frontier_cluster_min_size: 5.0
+goal_tolerance: 1.0
+
+# Tree detection parameters
+tree_height_min: 0.4
+tree_height_max: 0.7
+tree_cluster_tolerance: 0.5
+tree_min_cluster_size: 10
+
+# Orbit anchor parameters
+orbit_radius: 2.0
+orbit_spacing: 1.0
+
+# Path planning parameters
+path_resolution: 0.1
+path_smoothing_factor: 0.5
+
+# Cost weights
+yaw_change_weight: 0.5
+frontier_gain_weight: 1.0
+distance_weight: 1.0
+```
+
+### Topic Remapping
+
+To integrate with different SLAM systems, remap topics:
+
+```bash
+ros2 launch orbit_planner orbit_exploration.launch.py \
+  --ros-args -r /lio_sam/mapping/cloudRegistered:=/your_pointcloud_topic \
+             -r /lio_sam/odometry:=/your_odometry_topic
+```
+
+## API Reference
+
+### Services
+
+- `/orbit_planner/start_exploration` (std_srvs/srv/Empty): Start autonomous exploration
+- `/orbit_planner/stop_exploration` (std_srvs/srv/Empty): Stop exploration
+
+### Subscribed Topics
+
+- `/lio_sam/mapping/cloudRegistered` (sensor_msgs/msg/PointCloud2): Input point cloud from LIO-SAM
+- `/lio_sam/odometry` (geometry_msgs/msg/PoseStamped): Robot pose from LIO-SAM
+- `/orbit_planner/exploration_area` (geometry_msgs/msg/PolygonStamped): Exploration area definition
+
+### Published Topics
+
+- `/orbit_planner/trajectory` (nav_msgs/msg/Path): Planned exploration path
+- `/orbit_planner/goal` (geometry_msgs/msg/PoseStamped): Current exploration goal
+- `/orbit_planner/frontiers` (visualization_msgs/msg/MarkerArray): Frontier visualization
+- `/orbit_planner/orbit_anchors` (visualization_msgs/msg/MarkerArray): Orbit anchor visualization
+- `/orbit_planner/visited` (visualization_msgs/msg/MarkerArray): Visited goals visualization
+- `/orbit_planner/occupancy_grid` (nav_msgs/msg/OccupancyGrid): Occupancy grid map
+
+## Developer Guide
+
+### Code Structure
+
+```
+orbit_planner/
+├── src/                           # Source code
+│   ├── orbit_planner_node.cpp     # Main planner node
+│   ├── orbit_voxblox_interface.cpp # Voxblox integration
+│   ├── tree_clusterer.cpp         # Tree detection & clustering
+│   ├── frontier_detector.cpp      # Frontier detection
+│   ├── path_planner.cpp           # Path planning algorithms
+│   ├── orbit_anchor_generator.cpp # Orbit anchor generation
+│   └── orbit_panel_plugin.cpp     # RViz2 panel plugin
+├── include/orbit_planner/         # Header files
+│   ├── orbit_planner_node.hpp
+│   ├── orbit_voxblox_interface.hpp
+│   ├── tree_clusterer.hpp
+│   ├── frontier_detector.hpp
+│   ├── path_planner.hpp
+│   ├── orbit_anchor_generator.hpp
+│   └── orbit_panel_plugin.hpp
+├── launch/                        # Launch files
+│   └── orbit_exploration.launch.py
+├── config/                        # Configuration files
+│   └── orbit_planner_params.yaml
+├── rviz/                          # RViz configurations
+│   ├── orbit_planner.rviz
+│   └── orbit_panel_plugin.xml
+└── test/                          # Unit tests
+    └── test_orbit_planner.cpp
+```
+
+### Adding New Features
+
+1. **Define Interface**: Add function declarations in header files
+2. **Implement Logic**: Write implementation in corresponding `.cpp` files
+3. **Update Build**: Add new sources to `CMakeLists.txt`
+4. **Add Parameters**: Update configuration files with new parameters
+5. **Write Tests**: Create unit tests for new functionality
+6. **Update Documentation**: Update README and code comments
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Voxblox Compilation Error**: Check Eigen3 dependency installation
+2. **RViz Plugin Load Failure**: Verify package build and environment setup
+3. **Memory Issues**: Adjust voxel_size parameter in configuration
+4. **TF Transform Errors**: Ensure proper frame_id configuration
+5. **Point Cloud Processing Issues**: Check PCL library installation
+
+### Debugging
+
+```bash
+# Set debug logging level
+export RCUTILS_LOGGING_SEVERITY_THRESHOLD=DEBUG
+
+# Debug specific node
+ros2 run orbit_planner orbit_planner_node --ros-args --log-level debug
+
+# Check topic connections
+ros2 topic list
+ros2 topic info /orbit_planner/trajectory
+
+# Monitor system performance
+ros2 run orbit_planner orbit_planner_node --ros-args --log-level info
+```
+
+### Performance Optimization
+
+1. **Reduce Voxel Size**: For higher resolution but more memory usage
+2. **Adjust Planning Rate**: Lower frequency for less CPU usage
+3. **Limit Exploration Distance**: Reduce max_planning_distance parameter
+4. **Optimize Tree Detection**: Adjust clustering parameters for your environment
+
+## License
 
 MIT License
 
-## 기여
+## Contributing
 
 1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-## 참고 문헌
+## References
 
 - [Voxblox: Incremental 3D Euclidean Signed Distance Fields for on-board MAV planning](https://github.com/ethz-asl/voxblox)
 - [LIO-SAM: Tightly-coupled Lidar Inertial Odometry via Smoothing and Mapping](https://github.com/TixiaoShan/LIO-SAM)
 - [ROS2 Navigation Stack](https://github.com/ros-planning/navigation2)
+- [PCL: Point Cloud Library](https://pointclouds.org/)
+- [RViz2: 3D Visualization Tool](https://github.com/ros2/rviz)
 
-## 연락처
+## Citation
 
-개발팀: developer@example.com
+If you use this package in your research, please cite:
+
+```bibtex
+@article{orbit_planner_2025,
+  title={Orbit Planner: Map-Free Navigation for Orchard Monitoring and Mapping},
+  author={Woo, Sangbeom and Kim, Duksu},
+  journal={Computers and Electronics in Agriculture},
+  year={2025}
+}
+```
+
+## Contact
+
+Development Team: developer@example.com
+
+## Acknowledgments
+
+- KoreaTech School of Computer Science and Engineering
+- Active Orchard SLAM project team
+- ROS2 community for excellent tools and documentation

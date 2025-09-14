@@ -1,8 +1,21 @@
-#ifndef ORBIT_PLANNER_ORBIT_PANEL_PLUGIN_HPP
-#define ORBIT_PLANNER_ORBIT_PANEL_PLUGIN_HPP
+/**
+ * @file orbit_panel_plugin.hpp
+ * @brief RViz2 Panel plugin for orbit planner control
+ * 
+ * @author Sangbeom Woo, Duksu Kim
+ * @date 2025-01-15
+ * @version 1.0
+ * 
+ * @details
+ * This class implements an RViz2 panel plugin that provides a GUI for
+ * defining exploration areas and controlling the orbit planner.
+ */
 
-#include <memory>
-#include <vector>
+#pragma once
+
+#include <rviz_common/panel.hpp>
+#include <rviz_common/display_context.hpp>
+#include <rviz_common/ros_integration/ros_node_abstraction.hpp>
 
 #include <QWidget>
 #include <QVBoxLayout>
@@ -15,266 +28,155 @@
 #include <QCheckBox>
 #include <QSpinBox>
 #include <QDoubleSpinBox>
-#include <QComboBox>
+#include <QSlider>
 #include <QProgressBar>
 #include <QListWidget>
 #include <QTableWidget>
-#include <QHeaderView>
-#include <QMessageBox>
+#include <QTabWidget>
+#include <QComboBox>
+#include <QSlider>
 #include <QTimer>
 
 #include <rclcpp/rclcpp.hpp>
-#include <geometry_msgs/msg/pose_stamped.hpp>
-#include <geometry_msgs/msg/polygon_stamped.hpp>
 #include <geometry_msgs/msg/point_stamped.hpp>
+#include <geometry_msgs/msg/polygon_stamped.hpp>
+#include <geometry_msgs/msg/pose_stamped.hpp>
 #include <nav_msgs/msg/path.hpp>
 #include <visualization_msgs/msg/marker_array.hpp>
 #include <std_srvs/srv/empty.hpp>
 
-#include <rviz_common/panel.hpp>
-#include <rviz_common/display.hpp>
-#include <rviz_common/display_group.hpp>
-#include <rviz_common/visualization_manager.hpp>
-#include <rviz_common/view_manager.hpp>
-#include <rviz_common/view_controller.hpp>
-#include <rviz_common/tool_manager.hpp>
-#include <rviz_common/tool.hpp>
+#include <memory>
+#include <vector>
 
-namespace orbit_planner
-{
+namespace orbit_planner {
 
-/**
- * @brief RViz2 panel plugin for orbit planner control
- * 
- * This panel provides a graphical user interface for:
- * - Defining exploration areas
- * - Setting start positions
- * - Starting/stopping exploration
- * - Monitoring exploration progress
- * - Visualizing exploration data
- */
-class OrbitPanelPlugin : public rviz_common::Panel
-{
-  Q_OBJECT
+class OrbitPanelPlugin : public rviz_common::Panel {
+    Q_OBJECT
 
 public:
-  /**
-   * @brief Constructor
-   * @param parent Parent widget
-   */
-  explicit OrbitPanelPlugin(QWidget * parent = nullptr);
+    OrbitPanelPlugin(QWidget* parent = nullptr);
+    ~OrbitPanelPlugin() = default;
 
-  /**
-   * @brief Destructor
-   */
-  ~OrbitPanelPlugin();
-
-  /**
-   * @brief Initialize the panel
-   * @param context RViz context
-   */
-  void onInitialize() override;
-
-  /**
-   * @brief Save panel configuration
-   * @param config Config object
-   */
-  void save(rviz_common::Config config) const override;
-
-  /**
-   * @brief Load panel configuration
-   * @param config Config object
-   */
-  void load(const rviz_common::Config & config) override;
-
-protected:
-  /**
-   * @brief Handle mouse click events
-   * @param event Mouse event
-   */
-  void mousePressEvent(QMouseEvent * event) override;
+    // RViz panel interface
+    void onInitialize() override;
+    void save(rviz_common::Config config) const override;
+    void load(const rviz_common::Config& config) override;
 
 private slots:
-  /**
-   * @brief Handle start point selection
-   */
-  void onSelectStartPoint();
-
-  /**
-   * @brief Handle polygon drawing mode toggle
-   */
-  void onTogglePolygonMode();
-
-  /**
-   * @brief Handle start exploration button
-   */
-  void onStartExploration();
-
-  /**
-   * @brief Handle stop exploration button
-   */
-  void onStopExploration();
-
-  /**
-   * @brief Handle clear polygon button
-   */
-  void onClearPolygon();
-
-  /**
-   * @brief Handle parameter changes
-   */
-  void onParameterChanged();
-
-  /**
-   * @brief Handle status update timer
-   */
-  void updateStatus();
+    // UI event handlers
+    void onStartPointClicked();
+    void onAddPolygonPoint();
+    void onClearPolygon();
+    void onStartExploration();
+    void onStopExploration();
+    void onResetExploration();
+    void onParameterChanged();
+    void onUpdateStatus();
 
 private:
-  /**
-   * @brief Initialize ROS2 components
-   */
-  void initializeROS();
-
-  /**
-   * @brief Create UI elements
-   */
-  void createUI();
-
-  /**
-   * @brief Setup signal-slot connections
-   */
-  void setupConnections();
-
-  /**
-   * @brief Update UI state based on exploration status
-   */
-  void updateUIState();
-
-  /**
-   * @brief Handle clicked point from RViz
-   * @param point Clicked point
-   */
-  void handleClickedPoint(const geometry_msgs::msg::PointStamped & point);
-
-  /**
-   * @brief Add point to exploration polygon
-   * @param point Point to add
-   */
-  void addPolygonPoint(const geometry_msgs::msg::Point & point);
-
-  /**
-   * @brief Validate exploration setup
-   * @return true if setup is valid
-   */
-  bool validateExplorationSetup();
-
-  /**
-   * @brief Publish exploration polygon
-   */
-  void publishExplorationPolygon();
-
-  /**
-   * @brief Publish start pose
-   */
-  void publishStartPose();
-
-  /**
-   * @brief Update exploration status display
-   */
-  void updateExplorationStatus();
-
-  /**
-   * @brief Update frontier candidates display
-   */
-  void updateFrontierDisplay();
-
-  /**
-   * @brief Update path display
-   */
-  void updatePathDisplay();
-
-  // ROS2 components
-  rclcpp::Node::SharedPtr node_;
-  rclcpp::Publisher<geometry_msgs::msg::PolygonStamped>::SharedPtr polygon_pub_;
-  rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr start_pose_pub_;
-  rclcpp::Subscription<nav_msgs::msg::Path>::SharedPtr trajectory_sub_;
-  rclcpp::Subscription<geometry_msgs::msg::PoseStamped>::SharedPtr goal_sub_;
-  rclcpp::Subscription<visualization_msgs::msg::MarkerArray>::SharedPtr markers_sub_;
-  rclcpp::Client<std_srvs::srv::Empty>::SharedPtr start_exploration_client_;
-  rclcpp::Client<std_srvs::srv::Empty>::SharedPtr stop_exploration_client_;
-
-  // UI components
-  QVBoxLayout * main_layout_;
-  QGroupBox * exploration_group_;
-  QGroupBox * polygon_group_;
-  QGroupBox * parameters_group_;
-  QGroupBox * status_group_;
-
-  // Exploration controls
-  QPushButton * select_start_btn_;
-  QPushButton * toggle_polygon_btn_;
-  QPushButton * start_exploration_btn_;
-  QPushButton * stop_exploration_btn_;
-  QPushButton * clear_polygon_btn_;
-
-  // Start point display
-  QLabel * start_point_label_;
-  QLineEdit * start_x_edit_;
-  QLineEdit * start_y_edit_;
-  QLineEdit * start_yaw_edit_;
-
-  // Polygon display
-  QListWidget * polygon_points_list_;
-  QLabel * polygon_area_label_;
-
-  // Parameters
-  QDoubleSpinBox * robot_radius_spin_;
-  QDoubleSpinBox * goal_tolerance_spin_;
-  QDoubleSpinBox * exploration_rate_spin_;
-  QDoubleSpinBox * max_planning_distance_spin_;
-  QSpinBox * frontier_cluster_min_size_spin_;
-  QDoubleSpinBox * frontier_cluster_max_distance_spin_;
-
-  // Status display
-  QLabel * exploration_status_label_;
-  QLabel * current_goal_label_;
-  QLabel * path_length_label_;
-  QLabel * frontiers_count_label_;
-  QProgressBar * exploration_progress_;
-  QTextEdit * status_log_;
-  
-  // Advanced status display
-  QLabel * exploration_percentage_label_;
-  QLabel * trees_detected_label_;
-  QLabel * rows_detected_label_;
-  QLabel * planning_time_label_;
-  QLabel * learning_metrics_label_;
-  QProgressBar * learning_progress_;
-  QLabel * performance_metrics_label_;
-
-  // Data
-  geometry_msgs::msg::PoseStamped start_pose_;
-  geometry_msgs::msg::PolygonStamped exploration_polygon_;
-  nav_msgs::msg::Path current_trajectory_;
-  geometry_msgs::msg::PoseStamped current_goal_;
-  visualization_msgs::msg::MarkerArray current_markers_;
-
-  // State
-  bool polygon_mode_active_;
-  bool exploration_active_;
-  bool start_point_selected_;
-  std::vector<geometry_msgs::msg::Point> polygon_points_;
-
-  // Timers
-  QTimer * status_update_timer_;
-  QTimer * ui_update_timer_;
-
-  // RViz tools
-  rviz_common::Tool * point_tool_;
-  rviz_common::Tool * previous_tool_;
+    // ROS2 communication
+    rclcpp::Node::SharedPtr ros_node_;
+    
+    // Publishers
+    rclcpp::Publisher<geometry_msgs::msg::PointStamped>::SharedPtr clicked_point_pub_;
+    rclcpp::Publisher<geometry_msgs::msg::PolygonStamped>::SharedPtr polygon_pub_;
+    rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr start_pose_pub_;
+    
+    // Subscribers
+    rclcpp::Subscription<nav_msgs::msg::Path>::SharedPtr trajectory_sub_;
+    rclcpp::Subscription<geometry_msgs::msg::PoseStamped>::SharedPtr goal_sub_;
+    rclcpp::Subscription<visualization_msgs::msg::MarkerArray>::SharedPtr frontiers_sub_;
+    rclcpp::Subscription<visualization_msgs::msg::MarkerArray>::SharedPtr orbit_anchors_sub_;
+    
+    // Services
+    rclcpp::Client<std_srvs::srv::Empty>::SharedPtr start_exploration_client_;
+    rclcpp::Client<std_srvs::srv::Empty>::SharedPtr stop_exploration_client_;
+    
+    // UI Components
+    QVBoxLayout* main_layout_;
+    QTabWidget* tab_widget_;
+    
+    // Control Tab
+    QWidget* control_tab_;
+    QPushButton* start_point_btn_;
+    QPushButton* add_point_btn_;
+    QPushButton* clear_polygon_btn_;
+    QPushButton* start_exploration_btn_;
+    QPushButton* stop_exploration_btn_;
+    QPushButton* reset_btn_;
+    
+    // Status Tab
+    QWidget* status_tab_;
+    QLabel* status_label_;
+    QLabel* exploration_area_label_;
+    QLabel* current_goal_label_;
+    QLabel* frontiers_count_label_;
+    QLabel* orbit_anchors_count_label_;
+    QProgressBar* exploration_progress_;
+    QTextEdit* log_text_;
+    
+    // Visualization Tab
+    QWidget* visualization_tab_;
+    QCheckBox* show_frontiers_cb_;
+    QCheckBox* show_orbit_anchors_cb_;
+    QCheckBox* show_visited_cb_;
+    QCheckBox* show_trajectory_cb_;
+    QCheckBox* show_occupancy_grid_cb_;
+    
+    // Parameters Tab
+    QWidget* parameters_tab_;
+    QDoubleSpinBox* robot_radius_spin_;
+    QDoubleSpinBox* safety_margin_spin_;
+    QDoubleSpinBox* max_planning_distance_spin_;
+    QDoubleSpinBox* frontier_cluster_min_size_spin_;
+    QDoubleSpinBox* yaw_change_weight_spin_;
+    QDoubleSpinBox* frontier_gain_weight_spin_;
+    QDoubleSpinBox* orbit_radius_spin_;
+    QDoubleSpinBox* orbit_spacing_spin_;
+    
+    // Data
+    std::vector<geometry_msgs::msg::Point> polygon_points_;
+    geometry_msgs::msg::PointStamped start_point_;
+    bool start_point_selected_;
+    bool exploration_active_;
+    
+    // Status
+    std::string current_status_;
+    geometry_msgs::msg::PoseStamped current_goal_;
+    int frontiers_count_;
+    int orbit_anchors_count_;
+    double exploration_progress_value_;
+    
+    // Timer for status updates
+    QTimer* status_timer_;
+    
+    // Callbacks
+    void trajectoryCallback(const nav_msgs::msg::Path::SharedPtr msg);
+    void goalCallback(const geometry_msgs::msg::PoseStamped::SharedPtr msg);
+    void frontiersCallback(const visualization_msgs::msg::MarkerArray::SharedPtr msg);
+    void orbitAnchorsCallback(const visualization_msgs::msg::MarkerArray::SharedPtr msg);
+    
+    // UI update functions
+    void updateStatus();
+    void updatePolygonDisplay();
+    void updateParameterDisplay();
+    void logMessage(const std::string& message);
+    
+    // Utility functions
+    void setupUI();
+    void setupControlTab();
+    void setupStatusTab();
+    void setupVisualizationTab();
+    void setupParametersTab();
+    void connectSignals();
+    void loadParameters();
+    void saveParameters();
+    
+    // ROS2 setup
+    void setupROS2();
+    void publishPolygon();
+    void publishStartPose();
+    void spin();
 };
 
 } // namespace orbit_planner
-
-#endif // ORBIT_PLANNER_ORBIT_PANEL_PLUGIN_HPP

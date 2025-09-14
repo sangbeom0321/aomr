@@ -3,16 +3,17 @@
 <package format="3">
   <name>orbit_planner</name>
   <version>1.0.0</version>
-  <description>Autonomous exploration planner for orchard environments using Voxblox mapping and frontier-based exploration</description>
+  <description>Orbit Planner: Map-Free Navigation for Orchard Monitoring and Mapping</description>
   
-  <maintainer email="developer@example.com">Orbit Planner Team</maintainer>
+  <maintainer email="bluekds@koreatech.ac.kr">Duksu Kim</maintainer>
   <license>MIT</license>
   
-  <url type="website">https://github.com/your-repo/orbit_planner</url>
-  <url type="repository">https://github.com/your-repo/orbit_planner</url>
-  <url type="bugtracker">https://github.com/your-repo/orbit_planner/issues</url>
+  <url type="website">https://github.com/aomr/orbit_planner</url>
+  <url type="repository">https://github.com/aomr/orbit_planner</url>
+  <url type="bugtracker">https://github.com/aomr/orbit_planner/issues</url>
   
-  <author email="developer@example.com">Orbit Planner Team</author>
+  <author email="bluekds@koreatech.ac.kr">Sangbeom Woo</author>
+  <author email="bluekds@koreatech.ac.kr">Duksu Kim</author>
   
   <buildtool_depend>ament_cmake</buildtool_depend>
   
@@ -27,22 +28,26 @@
   <depend>tf2</depend>
   <depend>tf2_ros</depend>
   <depend>tf2_geometry_msgs</depend>
-  
-  <!-- RViz2 Dependencies -->
-  <depend>rviz_common</depend>
-  <depend>rviz_rendering</depend>
-  <depend>rviz_visualization_tools</depend>
-  <depend>rviz_default_plugins</depend>
+  <depend>tf2_eigen</depend>
+  <depend>std_srvs</depend>
   
   <!-- PCL Dependencies -->
   <depend>pcl_ros</depend>
   <depend>pcl_conversions</depend>
   
-  <!-- Eigen3 for Voxblox -->
+  <!-- Eigen Dependencies -->
   <depend>eigen3_cmake_module</depend>
   
-  <!-- Service Dependencies -->
-  <depend>std_srvs</depend>
+  <!-- OpenCV Dependencies -->
+  <depend>libopencv-dev</depend>
+  
+  <!-- RViz Dependencies -->
+  <depend>rviz_common</depend>
+  <depend>rviz_rendering</depend>
+  <depend>rviz_visual_tools</depend>
+  
+  <!-- Qt Dependencies for RViz Panel -->
+  <depend>qtbase5-dev</depend>
   
   <!-- Test Dependencies -->
   <test_depend>ament_lint_auto</test_depend>
@@ -51,6 +56,5 @@
   
   <export>
     <build_type>ament_cmake</build_type>
-    <rviz_common plugin="${prefix}/rviz/orbit_panel_plugin.xml"/>
   </export>
 </package>

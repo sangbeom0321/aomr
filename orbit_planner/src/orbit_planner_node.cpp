@@ -1,470 +1,472 @@
 #include "orbit_planner/orbit_planner_node.hpp"
-
-#include <algorithm>
-#include <cmath>
-#include <queue>
-#include <set>
-#include <map>
-
 #include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
-#include <tf2/LinearMath/Quaternion.h>
+#include <cmath>
 
-namespace orbit_planner
-{
+namespace orbit_planner {
 
-OrbitPlannerNode::OrbitPlannerNode(const rclcpp::NodeOptions & options)
-: Node("orbit_planner", options)
-, exploration_active_(false)
-, polygon_mode_active_(false)
-, start_point_selected_(false)
-, map_frame_("map")
-, base_frame_("base_link")
-{
-  // Declare parameters
-  this->declare_parameter("robot_radius", 0.4);
-  this->declare_parameter("goal_tolerance", 1.0);
-  this->declare_parameter("frontier_cluster_min_size", 5);
-  this->declare_parameter("frontier_cluster_max_distance", 2.0);
-  this->declare_parameter("yaw_change_weight", 0.5);
-  this->declare_parameter("frontier_gain_weight", 1.0);
-  this->declare_parameter("distance_weight", 0.3);
-  this->declare_parameter("exploration_rate", 1.0);
-  this->declare_parameter("max_planning_distance", 50.0);
-  this->declare_parameter("visited_radius", 3.0);
-  this->declare_parameter("map_frame", "map");
-  this->declare_parameter("base_frame", "base_link");
-
-  // Get parameters
-  robot_radius_ = this->get_parameter("robot_radius").as_double();
-  goal_tolerance_ = this->get_parameter("goal_tolerance").as_double();
-  frontier_cluster_min_size_ = this->get_parameter("frontier_cluster_min_size").as_int();
-  frontier_cluster_max_distance_ = this->get_parameter("frontier_cluster_max_distance").as_double();
-  yaw_change_weight_ = this->get_parameter("yaw_change_weight").as_double();
-  frontier_gain_weight_ = this->get_parameter("frontier_gain_weight").as_double();
-  distance_weight_ = this->get_parameter("distance_weight").as_double();
-  exploration_rate_ = this->get_parameter("exploration_rate").as_double();
-  max_planning_distance_ = this->get_parameter("max_planning_distance").as_double();
-  visited_radius_ = this->get_parameter("visited_radius").as_double();
-  map_frame_ = this->get_parameter("map_frame").as_string();
-  base_frame_ = this->get_parameter("base_frame").as_string();
-
-  // Initialize TF
+OrbitPlannerNode::OrbitPlannerNode() 
+    : Node("orbit_planner_node"),
+      should_explore_(false) {
+    
+    // Load parameters
+    loadParameters();
+    
+    // Initialize TF2
   tf_buffer_ = std::make_shared<tf2_ros::Buffer>(this->get_clock());
   tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
 
-  // Initialize Voxblox interface
-  voxblox_interface_ = std::make_shared<OrbitVoxbloxInterface>();
+    // Initialize core components
+    voxblox_interface_ = std::make_unique<OrbitVoxbloxInterface>();
+    tree_clusterer_ = std::make_unique<TreeClusterer>();
+    frontier_detector_ = std::make_unique<FrontierDetector>();
+    path_planner_ = std::make_unique<PathPlanner>();
+    orbit_anchor_generator_ = std::make_unique<OrbitAnchorGenerator>();
+    
+    // Initialize voxblox interface
+    voxblox_interface_->initialize(params_.robot_radius, params_.safety_margin);
+    
+    // Set parameters for components
+    tree_clusterer_->setParameters(
+        params_.tree_height_min, params_.tree_height_max,
+        params_.tree_cluster_tolerance, params_.tree_min_cluster_size,
+        0.1, 1.0, 5.0, 3);
+    
+    frontier_detector_->setParameters(
+        params_.robot_radius, static_cast<int>(params_.frontier_cluster_min_size),
+        params_.max_planning_distance, params_.frontier_gain_weight);
+    
+    path_planner_->setParameters(
+        params_.robot_radius, params_.safety_margin,
+        params_.path_resolution, params_.max_planning_distance);
+    
+    orbit_anchor_generator_->setParameters(
+        params_.orbit_radius, params_.orbit_spacing,
+        5.0, params_.max_planning_distance);
+    
+    // Create subscribers
+    pointcloud_sub_ = this->create_subscription<sensor_msgs::msg::PointCloud2>(
+        "/lio_sam/mapping/cloudRegistered", 10,
+        std::bind(&OrbitPlannerNode::pointCloudCallback, this, std::placeholders::_1));
+    
+    pose_sub_ = this->create_subscription<geometry_msgs::msg::PoseStamped>(
+        "/lio_sam/odometry", 10,
+        std::bind(&OrbitPlannerNode::poseCallback, this, std::placeholders::_1));
+    
+    area_sub_ = this->create_subscription<geometry_msgs::msg::PolygonStamped>(
+        "/orbit_planner/exploration_area", 10,
+        std::bind(&OrbitPlannerNode::areaCallback, this, std::placeholders::_1));
 
   // Create publishers
-  trajectory_pub_ = this->create_publisher<nav_msgs::msg::Path>("/orbit_planner/trajectory", 10);
-  goal_pub_ = this->create_publisher<geometry_msgs::msg::PoseStamped>("/orbit_planner/goal", 10);
-  markers_pub_ = this->create_publisher<visualization_msgs::msg::MarkerArray>("/orbit_planner/markers", 10);
+    trajectory_pub_ = this->create_publisher<nav_msgs::msg::Path>(
+        "/orbit_planner/trajectory", 10);
+    
+    goal_pub_ = this->create_publisher<geometry_msgs::msg::PoseStamped>(
+        "/orbit_planner/goal", 10);
+    
+    frontiers_pub_ = this->create_publisher<visualization_msgs::msg::MarkerArray>(
+        "/orbit_planner/frontiers", 10);
+    
+    orbit_anchors_pub_ = this->create_publisher<visualization_msgs::msg::MarkerArray>(
+        "/orbit_planner/orbit_anchors", 10);
+    
+    visited_pub_ = this->create_publisher<visualization_msgs::msg::MarkerArray>(
+        "/orbit_planner/visited", 10);
+    
+    occupancy_pub_ = this->create_publisher<nav_msgs::msg::OccupancyGrid>(
+        "/orbit_planner/occupancy", 10);
 
   // Create services
   start_exploration_srv_ = this->create_service<std_srvs::srv::Empty>(
     "/orbit_planner/start_exploration",
-    std::bind(&OrbitPlannerNode::startExplorationCallback, this, std::placeholders::_1, std::placeholders::_2));
+        std::bind(&OrbitPlannerNode::startExplorationCallback, this,
+                 std::placeholders::_1, std::placeholders::_2));
   
   stop_exploration_srv_ = this->create_service<std_srvs::srv::Empty>(
     "/orbit_planner/stop_exploration",
-    std::bind(&OrbitPlannerNode::stopExplorationCallback, this, std::placeholders::_1, std::placeholders::_2));
-
-  // Create exploration timer
-  exploration_timer_ = this->create_wall_timer(
-    std::chrono::milliseconds(static_cast<int>(1000.0 / exploration_rate_)),
-    std::bind(&OrbitPlannerNode::explorationLoop, this));
-
-  RCLCPP_INFO(this->get_logger(), "OrbitPlannerNode initialized");
+        std::bind(&OrbitPlannerNode::stopExplorationCallback, this,
+                 std::placeholders::_1, std::placeholders::_2));
+    
+    // Start exploration thread
+    should_explore_ = true;
+    exploration_thread_ = std::thread(&OrbitPlannerNode::explorationLoop, this);
+    
+    RCLCPP_INFO(this->get_logger(), "Orbit Planner Node initialized");
 }
 
-OrbitPlannerNode::~OrbitPlannerNode()
-{
-}
-
-void OrbitPlannerNode::initialize()
-{
-  RCLCPP_INFO(this->get_logger(), "OrbitPlannerNode initialized");
-}
-
-void OrbitPlannerNode::startExploration(
-  const geometry_msgs::msg::PolygonStamped & exploration_polygon,
-  const geometry_msgs::msg::PoseStamped & start_pose)
-{
-  std::lock_guard<std::mutex> lock(exploration_mutex_);
-  
-  exploration_polygon_ = exploration_polygon;
-  start_pose_ = start_pose;
-  exploration_active_ = true;
-  
-  // Clear visited areas
-  visited_positions_.clear();
-  visited_cluster_ids_.clear();
-  
-  RCLCPP_INFO(this->get_logger(), "Exploration started in polygon with %zu points", 
-              exploration_polygon.polygon.points.size());
-}
-
-void OrbitPlannerNode::stopExploration()
-{
-  std::lock_guard<std::mutex> lock(exploration_mutex_);
-  
-  exploration_active_ = false;
-  
-  // Clear current path and goal
-  current_path_.poses.clear();
-  current_goal_.pose.position.x = 0.0;
-  current_goal_.pose.position.y = 0.0;
-  current_goal_.pose.position.z = 0.0;
-  
-  RCLCPP_INFO(this->get_logger(), "Exploration stopped");
-}
-
-bool OrbitPlannerNode::isExplorationActive() const
-{
-  std::lock_guard<std::mutex> lock(exploration_mutex_);
-  return exploration_active_;
-}
-
-void OrbitPlannerNode::explorationLoop()
-{
-  std::lock_guard<std::mutex> lock(exploration_mutex_);
-  
-  if (!exploration_active_) {
-    return;
-  }
-
-  // Update robot pose
-  if (!updateRobotPose()) {
-    RCLCPP_WARN(this->get_logger(), "Failed to update robot pose");
-    return;
-  }
-
-  // Check if current goal is reached
-  if (!current_goal_.pose.position.x == 0.0 && !current_goal_.pose.position.y == 0.0) {
-    if (isGoalReached(current_goal_)) {
-      RCLCPP_INFO(this->get_logger(), "Goal reached, selecting next goal");
-      markAreaAsVisited(current_goal_.pose.position, visited_radius_);
-    } else {
-      return;  // Continue to current goal
+OrbitPlannerNode::~OrbitPlannerNode() {
+    should_explore_ = false;
+    if (exploration_thread_.joinable()) {
+        exploration_thread_.join();
     }
-  }
-
-  // Generate frontier candidates
-  std::vector<FrontierCandidate> candidates = generateFrontierCandidates();
-  
-  if (candidates.empty()) {
-    RCLCPP_INFO(this->get_logger(), "No more frontier candidates, exploration complete");
-    stopExploration();
-    return;
-  }
-
-  // Cluster frontiers
-  candidates = clusterFrontiers(candidates);
-
-  // Select best goal
-  FrontierCandidate best_goal = selectBestGoal(candidates);
-  
-  if (best_goal.visited) {
-    RCLCPP_INFO(this->get_logger(), "All frontiers visited, exploration complete");
-    stopExploration();
-    return;
-  }
-
-  // Plan path to goal
-  geometry_msgs::msg::PoseStamped goal_pose;
-  goal_pose.header.frame_id = map_frame_;
-  goal_pose.header.stamp = this->now();
-  goal_pose.pose.position = best_goal.position;
-  goal_pose.pose.orientation.w = 1.0;
-
-  PathResult path_result = planPath(goal_pose);
-  
-  if (!path_result.success) {
-    RCLCPP_WARN(this->get_logger(), "Failed to plan path to goal");
-    return;
-  }
-
-  // Update current goal and path
-  current_goal_ = goal_pose;
-  current_path_ = path_result.path;
-
-  // Publish results
-  publishTrajectory(current_path_);
-  publishGoal(current_goal_);
-  publishVisualizationMarkers(candidates, best_goal);
-
-  RCLCPP_INFO(this->get_logger(), "Selected goal at (%.2f, %.2f), path length: %.2f", 
-              best_goal.position.x, best_goal.position.y, path_result.path_length);
 }
 
-bool OrbitPlannerNode::updateRobotPose()
-{
-  try {
-    geometry_msgs::msg::TransformStamped transform = tf_buffer_->lookupTransform(
-      map_frame_, base_frame_, tf2::TimePointZero);
+void OrbitPlannerNode::loadParameters() {
+    // Update rates
+    this->declare_parameter("map_update_rate", params_.map_update_rate);
+    this->declare_parameter("planning_rate", params_.planning_rate);
     
-    current_pose_.header.frame_id = map_frame_;
-    current_pose_.header.stamp = this->now();
-    current_pose_.pose.position.x = transform.transform.translation.x;
-    current_pose_.pose.position.y = transform.transform.translation.y;
-    current_pose_.pose.position.z = transform.transform.translation.z;
-    current_pose_.pose.orientation = transform.transform.rotation;
+    // Robot parameters
+    this->declare_parameter("robot_radius", params_.robot_radius);
+    this->declare_parameter("safety_margin", params_.safety_margin);
     
-    return true;
-  } catch (tf2::TransformException & ex) {
-    RCLCPP_WARN(this->get_logger(), "Could not transform %s to %s: %s", 
-                base_frame_.c_str(), map_frame_.c_str(), ex.what());
-    return false;
-  }
+    // Exploration parameters
+    this->declare_parameter("max_planning_distance", params_.max_planning_distance);
+    this->declare_parameter("frontier_cluster_min_size", params_.frontier_cluster_min_size);
+    this->declare_parameter("frontier_cluster_max_distance", params_.frontier_cluster_max_distance);
+    this->declare_parameter("goal_tolerance", params_.goal_tolerance);
+    
+    // Cost weights
+    this->declare_parameter("yaw_change_weight", params_.yaw_change_weight);
+    this->declare_parameter("frontier_gain_weight", params_.frontier_gain_weight);
+    this->declare_parameter("distance_weight", params_.distance_weight);
+    
+    // Tree detection parameters
+    this->declare_parameter("tree_height_min", params_.tree_height_min);
+    this->declare_parameter("tree_height_max", params_.tree_height_max);
+    this->declare_parameter("tree_cluster_tolerance", params_.tree_cluster_tolerance);
+    this->declare_parameter("tree_min_cluster_size", params_.tree_min_cluster_size);
+    
+    // Orbit anchor parameters
+    this->declare_parameter("orbit_radius", params_.orbit_radius);
+    this->declare_parameter("orbit_spacing", params_.orbit_spacing);
+    
+    // Path planning parameters
+    this->declare_parameter("path_resolution", params_.path_resolution);
+    this->declare_parameter("path_smoothing_factor", params_.path_smoothing_factor);
+    
+    // Load values
+    params_.map_update_rate = this->get_parameter("map_update_rate").as_double();
+    params_.planning_rate = this->get_parameter("planning_rate").as_double();
+    params_.robot_radius = this->get_parameter("robot_radius").as_double();
+    params_.safety_margin = this->get_parameter("safety_margin").as_double();
+    params_.max_planning_distance = this->get_parameter("max_planning_distance").as_double();
+    params_.frontier_cluster_min_size = this->get_parameter("frontier_cluster_min_size").as_double();
+    params_.frontier_cluster_max_distance = this->get_parameter("frontier_cluster_max_distance").as_double();
+    params_.goal_tolerance = this->get_parameter("goal_tolerance").as_double();
+    params_.yaw_change_weight = this->get_parameter("yaw_change_weight").as_double();
+    params_.frontier_gain_weight = this->get_parameter("frontier_gain_weight").as_double();
+    params_.distance_weight = this->get_parameter("distance_weight").as_double();
+    params_.tree_height_min = this->get_parameter("tree_height_min").as_double();
+    params_.tree_height_max = this->get_parameter("tree_height_max").as_double();
+    params_.tree_cluster_tolerance = this->get_parameter("tree_cluster_tolerance").as_double();
+    params_.tree_min_cluster_size = this->get_parameter("tree_min_cluster_size").as_int();
+    params_.orbit_radius = this->get_parameter("orbit_radius").as_double();
+    params_.orbit_spacing = this->get_parameter("orbit_spacing").as_double();
+    params_.path_resolution = this->get_parameter("path_resolution").as_double();
+    params_.path_smoothing_factor = this->get_parameter("path_smoothing_factor").as_double();
 }
 
-std::vector<FrontierCandidate> OrbitPlannerNode::generateFrontierCandidates()
-{
-  std::vector<FrontierCandidate> candidates;
-  
-  if (!voxblox_interface_) {
-    return candidates;
+void OrbitPlannerNode::pointCloudCallback(const sensor_msgs::msg::PointCloud2::SharedPtr msg) {
+    // Convert to PCL
+    pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>);
+    pcl::fromROSMsg(*msg, *cloud);
+    
+    // Get robot pose
+    geometry_msgs::msg::PoseStamped robot_pose;
+    try {
+        auto transform = tf_buffer_->lookupTransform("map", "base_link", msg->header.stamp);
+        robot_pose.header = msg->header;
+        robot_pose.pose.position.x = transform.transform.translation.x;
+        robot_pose.pose.position.y = transform.transform.translation.y;
+        robot_pose.pose.position.z = transform.transform.translation.z;
+        robot_pose.pose.orientation = transform.transform.rotation;
+    } catch (tf2::TransformException& ex) {
+        RCLCPP_WARN(this->get_logger(), "Could not transform: %s", ex.what());
+    return;
   }
 
-  // Get occupancy grid
-  nav_msgs::msg::OccupancyGrid occupancy_grid = voxblox_interface_->getOccupancyGrid();
-  
-  if (occupancy_grid.data.empty()) {
-    return candidates;
+    // Integrate point cloud
+    voxblox_interface_->integratePointCloud(cloud, robot_pose);
+}
+
+void OrbitPlannerNode::poseCallback(const geometry_msgs::msg::PoseStamped::SharedPtr msg) {
+    std::lock_guard<std::mutex> lock(state_mutex_);
+    // Update robot pose in state if needed
+}
+
+void OrbitPlannerNode::areaCallback(const geometry_msgs::msg::PolygonStamped::SharedPtr msg) {
+    std::lock_guard<std::mutex> lock(state_mutex_);
+    state_.exploration_area = *msg;
+    state_.area_defined = true;
+    RCLCPP_INFO(this->get_logger(), "Exploration area received");
+}
+
+void OrbitPlannerNode::startExplorationCallback(
+    const std::shared_ptr<std_srvs::srv::Empty::Request> request,
+    std::shared_ptr<std_srvs::srv::Empty::Response> response) {
+    
+    std::lock_guard<std::mutex> lock(state_mutex_);
+    if (!state_.area_defined) {
+        RCLCPP_WARN(this->get_logger(), "Exploration area not defined");
+    return;
   }
 
-  // Find frontier cells
-  for (int x = 1; x < occupancy_grid.info.width - 1; ++x) {
-    for (int y = 1; y < occupancy_grid.info.height - 1; ++y) {
-      int index = y * occupancy_grid.info.width + x;
-      
-      // Check if current cell is free
-      if (occupancy_grid.data[index] != 0) {
-        continue;
-      }
-      
-      // Check if any neighbor is unknown
-      bool has_unknown_neighbor = false;
-      for (int dx = -1; dx <= 1; ++dx) {
-        for (int dy = -1; dy <= 1; ++dy) {
-          if (dx == 0 && dy == 0) continue;
-          
-          int nx = x + dx;
-          int ny = y + dy;
-          int nindex = ny * occupancy_grid.info.width + nx;
-          
-          if (nindex >= 0 && nindex < static_cast<int>(occupancy_grid.data.size()) &&
-              occupancy_grid.data[nindex] == -1) {
-            has_unknown_neighbor = true;
-            break;
-          }
-        }
-        if (has_unknown_neighbor) break;
-      }
-      
-      if (has_unknown_neighbor) {
-        // Convert grid coordinates to world coordinates
-        geometry_msgs::msg::Point world_point;
-        world_point.x = occupancy_grid.info.origin.position.x + x * occupancy_grid.info.resolution;
-        world_point.y = occupancy_grid.info.origin.position.y + y * occupancy_grid.info.resolution;
-        world_point.z = 0.0;
-        
-        // Check if point is in exploration area
-        if (!isPointInExplorationArea(world_point)) {
-          continue;
+    state_.is_exploring = true;
+    RCLCPP_INFO(this->get_logger(), "Exploration started");
+}
+
+void OrbitPlannerNode::stopExplorationCallback(
+    const std::shared_ptr<std_srvs::srv::Empty::Request> request,
+    std::shared_ptr<std_srvs::srv::Empty::Response> response) {
+    
+    std::lock_guard<std::mutex> lock(state_mutex_);
+    state_.is_exploring = false;
+    RCLCPP_INFO(this->get_logger(), "Exploration stopped");
+}
+
+void OrbitPlannerNode::explorationLoop() {
+    rclcpp::Rate rate(params_.planning_rate);
+    
+    while (rclcpp::ok() && should_explore_) {
+        {
+            std::lock_guard<std::mutex> lock(state_mutex_);
+            if (!state_.is_exploring || !state_.area_defined) {
+                rate.sleep();
+                continue;
+            }
         }
         
-        // Check if point is reachable
-        if (!voxblox_interface_->isFree(world_point)) {
-          continue;
+        // Update map
+        updateMap();
+        
+        // Generate candidates
+        generateCandidates();
+        
+        // Select next goal
+        selectNextGoal();
+        
+        // Plan path
+        planPath();
+        
+        // Publish visualization
+        publishVisualization();
+        
+        rate.sleep();
+    }
+}
+
+void OrbitPlannerNode::updateMap() {
+    // Update ESDF
+    voxblox_interface_->updateESDF();
+    
+    // Generate occupancy grid
+    geometry_msgs::msg::Point origin;
+    origin.x = -50.0;
+    origin.y = -50.0;
+    origin.z = 0.0;
+    
+    auto occupancy_grid = voxblox_interface_->generateOccupancyGrid(origin, 0.1, 1000, 1000);
+    occupancy_pub_->publish(occupancy_grid);
+}
+
+void OrbitPlannerNode::generateCandidates() {
+    // Get current robot pose
+    geometry_msgs::msg::PoseStamped robot_pose;
+    try {
+        auto transform = tf_buffer_->lookupTransform("map", "base_link", rclcpp::Time(0));
+        robot_pose.header.frame_id = "map";
+        robot_pose.header.stamp = this->now();
+        robot_pose.pose.position.x = transform.transform.translation.x;
+        robot_pose.pose.position.y = transform.transform.translation.y;
+        robot_pose.pose.position.z = transform.transform.translation.z;
+        robot_pose.pose.orientation = transform.transform.rotation;
+    } catch (tf2::TransformException& ex) {
+        RCLCPP_WARN(this->get_logger(), "Could not get robot pose: %s", ex.what());
+        return;
+    }
+    
+    // Generate occupancy grid for frontier detection
+    geometry_msgs::msg::Point origin;
+    origin.x = -50.0;
+    origin.y = -50.0;
+    origin.z = 0.0;
+    
+    auto occupancy_grid = voxblox_interface_->generateOccupancyGrid(origin, 0.1, 1000, 1000);
+    
+    // Detect frontiers
+    auto frontiers = frontier_detector_->detectFrontiers(occupancy_grid, robot_pose);
+    
+    // Filter frontiers within exploration area
+    std::vector<Frontier> valid_frontiers;
+    for (const auto& frontier : frontiers) {
+        if (isPointInPolygon(frontier.center, state_.exploration_area)) {
+            valid_frontiers.push_back(frontier);
         }
+    }
+    
+    // Update state
+    std::lock_guard<std::mutex> lock(state_mutex_);
+    state_.current_frontiers.clear();
+    for (const auto& frontier : valid_frontiers) {
+        state_.current_frontiers.push_back(frontier.center);
+    }
+}
+
+void OrbitPlannerNode::selectNextGoal() {
+    std::lock_guard<std::mutex> lock(state_mutex_);
+    
+    if (state_.current_frontiers.empty()) {
+        RCLCPP_INFO(this->get_logger(), "No more frontiers to explore");
+        state_.is_exploring = false;
+        return;
+    }
+    
+    // Simple selection: choose closest frontier
+    geometry_msgs::msg::PoseStamped robot_pose;
+    try {
+        auto transform = tf_buffer_->lookupTransform("map", "base_link", rclcpp::Time(0));
+        robot_pose.header.frame_id = "map";
+        robot_pose.header.stamp = this->now();
+        robot_pose.pose.position.x = transform.transform.translation.x;
+        robot_pose.pose.position.y = transform.transform.translation.y;
+        robot_pose.pose.position.z = transform.transform.translation.z;
+        robot_pose.pose.orientation = transform.transform.rotation;
+    } catch (tf2::TransformException& ex) {
+        RCLCPP_WARN(this->get_logger(), "Could not get robot pose: %s", ex.what());
+        return;
+    }
+    
+    double min_distance = std::numeric_limits<double>::max();
+    geometry_msgs::msg::Point best_goal;
+    
+    for (const auto& frontier : state_.current_frontiers) {
+        double distance = calculateDistance(robot_pose.pose.position, frontier);
+        if (distance < min_distance) {
+            min_distance = distance;
+            best_goal = frontier;
+        }
+    }
+    
+    // Create goal pose
+    state_.current_goal.header.frame_id = "map";
+    state_.current_goal.header.stamp = this->now();
+    state_.current_goal.pose.position = best_goal;
+    state_.current_goal.pose.orientation.w = 1.0;
+    
+    // Mark as visited
+    state_.visited_goals.push_back(best_goal);
+}
+
+void OrbitPlannerNode::planPath() {
+    std::lock_guard<std::mutex> lock(state_mutex_);
+    
+    if (state_.current_goal.pose.position.x == 0.0 && 
+        state_.current_goal.pose.position.y == 0.0) {
+        return;
+    }
+    
+    // Get robot pose
+    geometry_msgs::msg::PoseStamped robot_pose;
+    try {
+        auto transform = tf_buffer_->lookupTransform("map", "base_link", rclcpp::Time(0));
+        robot_pose.header.frame_id = "map";
+        robot_pose.header.stamp = this->now();
+        robot_pose.pose.position.x = transform.transform.translation.x;
+        robot_pose.pose.position.y = transform.transform.translation.y;
+        robot_pose.pose.position.z = transform.transform.translation.z;
+        robot_pose.pose.orientation = transform.transform.rotation;
+    } catch (tf2::TransformException& ex) {
+        RCLCPP_WARN(this->get_logger(), "Could not get robot pose: %s", ex.what());
+        return;
+    }
+    
+    // Generate occupancy grid for path planning
+    geometry_msgs::msg::Point origin;
+    origin.x = -50.0;
+    origin.y = -50.0;
+    origin.z = 0.0;
+    
+    auto occupancy_grid = voxblox_interface_->generateOccupancyGrid(origin, 0.1, 1000, 1000);
+    
+    // Plan path
+    auto path = path_planner_->planPath(robot_pose, state_.current_goal, occupancy_grid);
+    
+    if (!path.poses.empty()) {
+        state_.current_path = path;
+        trajectory_pub_->publish(path);
+        goal_pub_->publish(state_.current_goal);
+    }
+}
+
+void OrbitPlannerNode::publishVisualization() {
+    publishFrontiers();
+    publishVisitedGoals();
+}
+
+void OrbitPlannerNode::publishFrontiers() {
+    visualization_msgs::msg::MarkerArray marker_array;
+    
+    std::lock_guard<std::mutex> lock(state_mutex_);
+    
+    for (size_t i = 0; i < state_.current_frontiers.size(); ++i) {
+        visualization_msgs::msg::Marker marker;
+        marker.header.frame_id = "map";
+        marker.header.stamp = this->now();
+        marker.ns = "frontiers";
+        marker.id = i;
+        marker.type = visualization_msgs::msg::Marker::SPHERE;
+        marker.action = visualization_msgs::msg::Marker::ADD;
+        marker.pose.position = state_.current_frontiers[i];
+        marker.pose.orientation.w = 1.0;
+        marker.scale.x = 0.5;
+        marker.scale.y = 0.5;
+        marker.scale.z = 0.5;
+        marker.color.r = 0.0;
+        marker.color.g = 1.0;
+        marker.color.b = 0.0;
+        marker.color.a = 0.8;
         
-        // Create frontier candidate
-        FrontierCandidate candidate;
-        candidate.position = world_point;
-        candidate.information_gain = calculateInformationGain(candidate);
-        candidate.travel_cost = calculateTravelCost(candidate);
-        candidate.total_utility = frontier_gain_weight_ * candidate.information_gain - 
-                                 distance_weight_ * candidate.travel_cost;
-        candidate.visited = false;
-        candidate.cluster_id = -1;
+        marker_array.markers.push_back(marker);
+    }
+    
+    frontiers_pub_->publish(marker_array);
+}
+
+void OrbitPlannerNode::publishVisitedGoals() {
+    visualization_msgs::msg::MarkerArray marker_array;
+    
+    std::lock_guard<std::mutex> lock(state_mutex_);
+    
+    for (size_t i = 0; i < state_.visited_goals.size(); ++i) {
+        visualization_msgs::msg::Marker marker;
+        marker.header.frame_id = "map";
+        marker.header.stamp = this->now();
+        marker.ns = "visited";
+        marker.id = i;
+        marker.type = visualization_msgs::msg::Marker::SPHERE;
+        marker.action = visualization_msgs::msg::Marker::ADD;
+        marker.pose.position = state_.visited_goals[i];
+        marker.pose.orientation.w = 1.0;
+        marker.scale.x = 0.3;
+        marker.scale.y = 0.3;
+        marker.scale.z = 0.3;
+        marker.color.r = 1.0;
+        marker.color.g = 0.0;
+        marker.color.b = 0.0;
+        marker.color.a = 0.6;
         
-        candidates.push_back(candidate);
-      }
-    }
-  }
-  
-  return candidates;
-}
-
-std::vector<FrontierCandidate> OrbitPlannerNode::clusterFrontiers(
-  const std::vector<FrontierCandidate> & candidates)
-{
-  std::vector<FrontierCandidate> clustered_candidates = candidates;
-  
-  if (candidates.empty()) {
-    return clustered_candidates;
-  }
-  
-  // Simple clustering based on distance
-  int cluster_id = 0;
-  std::vector<bool> processed(candidates.size(), false);
-  
-  for (size_t i = 0; i < candidates.size(); ++i) {
-    if (processed[i]) continue;
-    
-    clustered_candidates[i].cluster_id = cluster_id;
-    processed[i] = true;
-    
-    // Find nearby candidates
-    for (size_t j = i + 1; j < candidates.size(); ++j) {
-      if (processed[j]) continue;
-      
-      double distance = std::sqrt(
-        std::pow(candidates[i].position.x - candidates[j].position.x, 2) +
-        std::pow(candidates[i].position.y - candidates[j].position.y, 2));
-      
-      if (distance < frontier_cluster_max_distance_) {
-        clustered_candidates[j].cluster_id = cluster_id;
-        processed[j] = true;
-      }
+        marker_array.markers.push_back(marker);
     }
     
-    cluster_id++;
-  }
-  
-  // Filter clusters by minimum size
-  std::map<int, int> cluster_sizes;
-  for (const auto & candidate : clustered_candidates) {
-    cluster_sizes[candidate.cluster_id]++;
-  }
-  
-  std::vector<FrontierCandidate> filtered_candidates;
-  for (const auto & candidate : clustered_candidates) {
-    if (cluster_sizes[candidate.cluster_id] >= frontier_cluster_min_size_) {
-      filtered_candidates.push_back(candidate);
-    }
-  }
-  
-  return filtered_candidates;
+    visited_pub_->publish(marker_array);
 }
 
-FrontierCandidate OrbitPlannerNode::selectBestGoal(const std::vector<FrontierCandidate> & candidates)
-{
-  if (candidates.empty()) {
-    return FrontierCandidate();
-  }
-  
-  // Find candidate with highest utility
-  auto best_candidate = std::max_element(candidates.begin(), candidates.end(),
-    [](const FrontierCandidate & a, const FrontierCandidate & b) {
-      return a.total_utility < b.total_utility;
-    });
-  
-  return *best_candidate;
-}
-
-PathResult OrbitPlannerNode::planPath(const geometry_msgs::msg::PoseStamped & goal)
-{
-  PathResult result;
-  
-  if (!voxblox_interface_) {
-    return result;
-  }
-  
-  // Simple straight-line path planning (in real implementation, use A* or RRT)
-  geometry_msgs::msg::Point start = current_pose_.pose.position;
-  geometry_msgs::msg::Point end = goal.pose.position;
-  
-  // Check if direct path is collision-free
-  int num_samples = static_cast<int>(std::sqrt(
-    std::pow(end.x - start.x, 2) + std::pow(end.y - start.y, 2)) / 0.5) + 1;
-  
-  bool collision_free = true;
-  for (int i = 0; i <= num_samples; ++i) {
-    double t = static_cast<double>(i) / num_samples;
-    geometry_msgs::msg::Point point;
-    point.x = start.x + t * (end.x - start.x);
-    point.y = start.y + t * (end.y - start.y);
-    point.z = start.z + t * (end.z - start.z);
-    
-    if (!voxblox_interface_->isFree(point)) {
-      collision_free = false;
-      break;
-    }
-  }
-  
-  if (!collision_free) {
-    RCLCPP_WARN(this->get_logger(), "Direct path is not collision-free");
-    return result;
-  }
-  
-  // Create path
-  result.path.header.frame_id = map_frame_;
-  result.path.header.stamp = this->now();
-  
-  for (int i = 0; i <= num_samples; ++i) {
-    double t = static_cast<double>(i) / num_samples;
-    geometry_msgs::msg::PoseStamped pose;
-    pose.header = result.path.header;
-    pose.pose.position.x = start.x + t * (end.x - start.x);
-    pose.pose.position.y = start.y + t * (end.y - start.y);
-    pose.pose.position.z = start.z + t * (end.z - start.z);
-    pose.pose.orientation.w = 1.0;
-    
-    result.path.poses.push_back(pose);
-  }
-  
-  result.success = true;
-  result.path_length = std::sqrt(
-    std::pow(end.x - start.x, 2) + std::pow(end.y - start.y, 2));
-  result.clearance = robot_radius_;
-  
-  return result;
-}
-
-bool OrbitPlannerNode::isGoalReached(const geometry_msgs::msg::PoseStamped & goal)
-{
-  double distance = std::sqrt(
-    std::pow(current_pose_.pose.position.x - goal.pose.position.x, 2) +
-    std::pow(current_pose_.pose.position.y - goal.pose.position.y, 2));
-  
-  return distance < goal_tolerance_;
-}
-
-void OrbitPlannerNode::markAreaAsVisited(const geometry_msgs::msg::Point & position, double radius)
-{
-  visited_positions_.push_back(position);
-  
-  // Mark nearby cluster IDs as visited
-  for (const auto & pos : visited_positions_) {
-    double distance = std::sqrt(
-      std::pow(position.x - pos.x, 2) + std::pow(position.y - pos.y, 2));
-    
-    if (distance < radius) {
-      // In a real implementation, you would mark the cluster ID as visited
-      // For now, we'll just store the position
-    }
-  }
-}
-
-bool OrbitPlannerNode::isPointInExplorationArea(const geometry_msgs::msg::Point & point) const
-{
-  if (exploration_polygon_.polygon.points.size() < 3) {
-    return true;  // No polygon defined, explore everywhere
-  }
-  
-  // Simple point-in-polygon test (ray casting algorithm)
+bool OrbitPlannerNode::isPointInPolygon(const geometry_msgs::msg::Point& point, 
+                                       const geometry_msgs::msg::PolygonStamped& polygon) {
+    // Simple point-in-polygon test using ray casting
   int crossings = 0;
-  for (size_t i = 0; i < exploration_polygon_.polygon.points.size(); ++i) {
-    size_t j = (i + 1) % exploration_polygon_.polygon.points.size();
+    const auto& points = polygon.polygon.points;
     
-    const auto & p1 = exploration_polygon_.polygon.points[i];
-    const auto & p2 = exploration_polygon_.polygon.points[j];
-    
-    if (((p1.y <= point.y) && (point.y < p2.y)) || ((p2.y <= point.y) && (point.y < p1.y))) {
-      double x_intersect = p1.x + (point.y - p1.y) * (p2.x - p1.x) / (p2.y - p1.y);
-      if (point.x < x_intersect) {
+    for (size_t i = 0; i < points.size(); ++i) {
+        size_t j = (i + 1) % points.size();
+        
+        if (((points[i].y <= point.y) && (point.y < points[j].y)) ||
+            ((points[j].y <= point.y) && (point.y < points[i].y))) {
+            
+            double x = points[i].x + (point.y - points[i].y) / (points[j].y - points[i].y) * 
+                      (points[j].x - points[i].x);
+            
+            if (point.x < x) {
         crossings++;
       }
     }
@@ -473,160 +475,42 @@ bool OrbitPlannerNode::isPointInExplorationArea(const geometry_msgs::msg::Point 
   return (crossings % 2) == 1;
 }
 
-double OrbitPlannerNode::calculateInformationGain(const FrontierCandidate & candidate)
-{
-  // Simple information gain based on distance to robot
-  double distance = std::sqrt(
-    std::pow(candidate.position.x - current_pose_.pose.position.x, 2) +
-    std::pow(candidate.position.y - current_pose_.pose.position.y, 2));
-  
-  // Closer frontiers have higher gain (simplified)
-  return 1.0 / (1.0 + distance);
+double OrbitPlannerNode::calculateDistance(const geometry_msgs::msg::Point& p1, 
+                                          const geometry_msgs::msg::Point& p2) {
+    double dx = p1.x - p2.x;
+    double dy = p1.y - p2.y;
+    double dz = p1.z - p2.z;
+    return std::sqrt(dx * dx + dy * dy + dz * dz);
 }
 
-double OrbitPlannerNode::calculateTravelCost(const FrontierCandidate & candidate)
-{
-  // Calculate Euclidean distance
-  double distance = std::sqrt(
-    std::pow(candidate.position.x - current_pose_.pose.position.x, 2) +
-    std::pow(candidate.position.y - current_pose_.pose.position.y, 2));
-  
-  // Add turning cost (simplified)
-  double yaw_cost = 0.0;
-  if (!current_path_.poses.empty()) {
-    // Calculate angle to candidate
-    double dx = candidate.position.x - current_pose_.pose.position.x;
-    double dy = candidate.position.y - current_pose_.pose.position.y;
-    double target_yaw = std::atan2(dy, dx);
+double OrbitPlannerNode::calculateYawChange(const geometry_msgs::msg::PoseStamped& from, 
+                                           const geometry_msgs::msg::PoseStamped& to) {
+    // Calculate yaw change between two poses
+    double yaw_from = std::atan2(2.0 * (from.pose.orientation.w * from.pose.orientation.z + 
+                                       from.pose.orientation.x * from.pose.orientation.y),
+                                1.0 - 2.0 * (from.pose.orientation.y * from.pose.orientation.y + 
+                                           from.pose.orientation.z * from.pose.orientation.z));
     
-    // Get current yaw from pose
-    tf2::Quaternion q(
-      current_pose_.pose.orientation.x,
-      current_pose_.pose.orientation.y,
-      current_pose_.pose.orientation.z,
-      current_pose_.pose.orientation.w);
-    double roll, pitch, yaw;
-    tf2::Matrix3x3(q).getRPY(roll, pitch, yaw);
+    double yaw_to = std::atan2(2.0 * (to.pose.orientation.w * to.pose.orientation.z + 
+                                     to.pose.orientation.x * to.pose.orientation.y),
+                              1.0 - 2.0 * (to.pose.orientation.y * to.pose.orientation.y + 
+                                         to.pose.orientation.z * to.pose.orientation.z));
     
-    double yaw_diff = std::abs(target_yaw - yaw);
-    if (yaw_diff > M_PI) {
-      yaw_diff = 2 * M_PI - yaw_diff;
-    }
+    double yaw_diff = yaw_to - yaw_from;
     
-    yaw_cost = yaw_diff * yaw_change_weight_;
-  }
-  
-  return distance + yaw_cost;
-}
-
-void OrbitPlannerNode::publishTrajectory(const nav_msgs::msg::Path & path)
-{
-  trajectory_pub_->publish(path);
-}
-
-void OrbitPlannerNode::publishGoal(const geometry_msgs::msg::PoseStamped & goal)
-{
-  goal_pub_->publish(goal);
-}
-
-void OrbitPlannerNode::publishVisualizationMarkers(
-  const std::vector<FrontierCandidate> & candidates,
-  const FrontierCandidate & selected_goal)
-{
-  visualization_msgs::msg::MarkerArray markers;
-  
-  // Create marker for frontier candidates
-  visualization_msgs::msg::Marker frontier_marker;
-  frontier_marker.header.frame_id = map_frame_;
-  frontier_marker.header.stamp = this->now();
-  frontier_marker.ns = "frontiers";
-  frontier_marker.id = 0;
-  frontier_marker.type = visualization_msgs::msg::Marker::POINTS;
-  frontier_marker.action = visualization_msgs::msg::Marker::ADD;
-  frontier_marker.scale.x = 0.2;
-  frontier_marker.scale.y = 0.2;
-  frontier_marker.color.r = 1.0;
-  frontier_marker.color.g = 0.0;
-  frontier_marker.color.b = 0.0;
-  frontier_marker.color.a = 0.8;
-  
-  for (const auto & candidate : candidates) {
-    if (candidate.visited) continue;
+    // Normalize to [-π, π]
+    while (yaw_diff > M_PI) yaw_diff -= 2.0 * M_PI;
+    while (yaw_diff < -M_PI) yaw_diff += 2.0 * M_PI;
     
-    frontier_marker.points.push_back(candidate.position);
-  }
-  
-  markers.markers.push_back(frontier_marker);
-  
-  // Create marker for selected goal
-  visualization_msgs::msg::Marker goal_marker;
-  goal_marker.header.frame_id = map_frame_;
-  goal_marker.header.stamp = this->now();
-  goal_marker.ns = "selected_goal";
-  goal_marker.id = 0;
-  goal_marker.type = visualization_msgs::msg::Marker::SPHERE;
-  goal_marker.action = visualization_msgs::msg::Marker::ADD;
-  goal_marker.pose.position = selected_goal.position;
-  goal_marker.pose.orientation.w = 1.0;
-  goal_marker.scale.x = 0.5;
-  goal_marker.scale.y = 0.5;
-  goal_marker.scale.z = 0.5;
-  goal_marker.color.r = 0.0;
-  goal_marker.color.g = 1.0;
-  goal_marker.color.b = 0.0;
-  goal_marker.color.a = 1.0;
-  
-  markers.markers.push_back(goal_marker);
-  
-  markers_pub_->publish(markers);
-}
-
-void OrbitPlannerNode::startExplorationCallback(
-  const std::shared_ptr<std_srvs::srv::Empty::Request> request,
-  std::shared_ptr<std_srvs::srv::Empty::Response> response)
-{
-  (void)request;
-  (void)response;
-  
-  // In a real implementation, you would get the polygon and start pose from the request
-  // For now, we'll use default values
-  geometry_msgs::msg::PolygonStamped polygon;
-  polygon.header.frame_id = map_frame_;
-  polygon.header.stamp = this->now();
-  
-  // Create a simple square exploration area
-  geometry_msgs::msg::Point32 point;
-  point.x = -10.0; point.y = -10.0; point.z = 0.0;
-  polygon.polygon.points.push_back(point);
-  point.x = 10.0; point.y = -10.0; point.z = 0.0;
-  polygon.polygon.points.push_back(point);
-  point.x = 10.0; point.y = 10.0; point.z = 0.0;
-  polygon.polygon.points.push_back(point);
-  point.x = -10.0; point.y = 10.0; point.z = 0.0;
-  polygon.polygon.points.push_back(point);
-  
-  geometry_msgs::msg::PoseStamped start_pose;
-  start_pose.header.frame_id = map_frame_;
-  start_pose.header.stamp = this->now();
-  start_pose.pose.position.x = 0.0;
-  start_pose.pose.position.y = 0.0;
-  start_pose.pose.position.z = 0.0;
-  start_pose.pose.orientation.w = 1.0;
-  
-  startExploration(polygon, start_pose);
-}
-
-void OrbitPlannerNode::stopExplorationCallback(
-  const std::shared_ptr<std_srvs::srv::Empty::Request> request,
-  std::shared_ptr<std_srvs::srv::Empty::Response> response)
-{
-  (void)request;
-  (void)response;
-  
-  stopExploration();
+    return std::abs(yaw_diff);
 }
 
 } // namespace orbit_planner
 
-#include "rclcpp_components/register_node_macro.hpp"
-RCLCPP_COMPONENTS_REGISTER_NODE(orbit_planner::OrbitPlannerNode)
+int main(int argc, char** argv) {
+    rclcpp::init(argc, argv);
+    auto node = std::make_shared<orbit_planner::OrbitPlannerNode>();
+    rclcpp::spin(node);
+    rclcpp::shutdown();
+    return 0;
+}

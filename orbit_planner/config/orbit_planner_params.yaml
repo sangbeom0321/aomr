@@ -1,138 +1,40 @@
-# Orbit Planner Configuration Parameters
+# Orbit Planner Parameters
 
-# Voxblox Interface Parameters
-voxblox_interface:
-  voxel_size: 0.1                    # Voxel size in meters
-  truncation_distance: 0.2           # TSDF truncation distance
-  esdf_max_distance: 2.0             # Maximum ESDF distance
-  robot_radius: 0.4                  # Robot radius for collision checking
-  update_rate: 2.0                   # Map update rate in Hz
-  grid_resolution: 0.1               # Grid resolution for 2D projection
-  point_cloud_topic: "/lio_sam/mapping/cloudRegistered"  # Input point cloud topic
+# Update rates
+map_update_rate: 2.0
+planning_rate: 1.0
 
-# Planner Node Parameters
-planner_node:
-  robot_radius: 0.4                  # Robot radius in meters
-  goal_tolerance: 1.0                # Goal tolerance in meters
-  frontier_cluster_min_size: 5       # Minimum frontier cluster size
-  frontier_cluster_max_distance: 2.0 # Maximum distance for clustering
-  yaw_change_weight: 0.5             # Weight for yaw change penalty
-  frontier_gain_weight: 1.0          # Weight for frontier information gain
-  distance_weight: 0.3               # Weight for distance cost
-  exploration_rate: 1.0              # Exploration loop rate in Hz
-  max_planning_distance: 50.0        # Maximum planning distance in meters
-  visited_radius: 3.0                # Radius for marking areas as visited
-  map_frame: "map"                   # Map frame ID
-  base_frame: "base_link"            # Base frame ID
+# Robot parameters
+robot_radius: 0.4
+safety_margin: 0.1
 
-# Panel Plugin Parameters
-panel_plugin:
-  default_robot_radius: 0.4          # Default robot radius
-  default_goal_tolerance: 1.0        # Default goal tolerance
-  default_exploration_rate: 1.0      # Default exploration rate
-  default_max_planning_distance: 50.0 # Default max planning distance
-  default_frontier_cluster_min_size: 5 # Default min cluster size
-  default_frontier_cluster_max_distance: 2.0 # Default max cluster distance
+# Exploration parameters
+max_planning_distance: 50.0
+frontier_cluster_min_size: 5.0
+frontier_cluster_max_distance: 10.0
+goal_tolerance: 1.0
 
-# Exploration Area Parameters
-exploration:
-  min_polygon_points: 3              # Minimum polygon points required
-  max_polygon_points: 20             # Maximum polygon points allowed
-  default_exploration_area_size: 100.0 # Default exploration area size in meters
+# Cost weights
+yaw_change_weight: 0.5
+frontier_gain_weight: 1.0
+distance_weight: 1.0
 
-# Path Planning Parameters
-path_planning:
-  path_resolution: 0.5               # Path resolution in meters
-  max_path_length: 200.0             # Maximum path length in meters
-  min_clearance: 0.2                 # Minimum clearance from obstacles
-  smoothing_enabled: true            # Enable path smoothing
-  smoothing_iterations: 5            # Number of smoothing iterations
+# Tree detection parameters
+tree_height_min: 0.4
+tree_height_max: 0.7
+tree_cluster_tolerance: 0.5
+tree_min_cluster_size: 10
 
-# Visualization Parameters
-visualization:
-  frontier_marker_scale: 0.2         # Scale for frontier markers
-  goal_marker_scale: 0.5             # Scale for goal markers
-  path_marker_scale: 0.1             # Scale for path markers
-  frontier_color_r: 1.0              # Frontier marker red component
-  frontier_color_g: 0.0              # Frontier marker green component
-  frontier_color_b: 0.0              # Frontier marker blue component
-  frontier_color_a: 0.8              # Frontier marker alpha component
-  goal_color_r: 0.0                  # Goal marker red component
-  goal_color_g: 1.0                  # Goal marker green component
-  goal_color_b: 0.0                  # Goal marker blue component
-  goal_color_a: 1.0                  # Goal marker alpha component
+# Orbit anchor parameters
+orbit_radius: 2.0
+orbit_spacing: 1.0
 
-# Safety Parameters
-safety:
-  emergency_stop_distance: 0.5       # Emergency stop distance in meters
-  max_velocity: 2.0                  # Maximum exploration velocity in m/s
-  max_angular_velocity: 1.0          # Maximum angular velocity in rad/s
-  collision_check_rate: 10.0         # Collision check rate in Hz
+# Path planning parameters
+path_resolution: 0.1
+path_smoothing_factor: 0.5
 
-# Advanced Path Planning Parameters
-advanced_path_planning:
-  algorithm_type: "A_STAR"           # A_STAR, RRT_STAR, VORONOI, HYBRID
-  enable_smoothing: true             # Enable path smoothing
-  enable_optimization: true          # Enable path optimization
-  max_planning_time: 5.0             # Maximum planning time in seconds
-  path_resolution: 0.5               # Path resolution in meters
-  max_curvature: 0.5                 # Maximum path curvature
-  safety_margin: 0.1                 # Safety margin in meters
-  max_iterations: 1000               # Maximum planning iterations
-
-# Orchard Specialized Parameters
-orchard_specialized:
-  enable_tree_detection: true        # Enable tree detection
-  enable_row_detection: true         # Enable row detection
-  expected_row_spacing: 3.0          # Expected row spacing in meters
-  expected_tree_spacing: 2.0         # Expected tree spacing in meters
-  tree_diameter: 0.5                 # Expected tree diameter in meters
-  row_width: 1.0                     # Row width in meters
-  exploration_margin: 0.5            # Exploration margin in meters
-  exploration_pattern: "ADAPTIVE"    # ROW_BY_ROW, SPIRAL, ZIGZAG, ADAPTIVE, CUSTOM
-  min_tree_confidence: 0.7           # Minimum tree detection confidence
-  max_trees_per_row: 50              # Maximum trees per row
-
-# Learning-Based Exploration Parameters
-learning_based:
-  enable_learning: false             # Enable learning-based exploration
-  enable_experience_replay: true     # Enable experience replay
-  learning_rate: 0.001               # Learning rate
-  discount_factor: 0.99              # Discount factor
-  epsilon_start: 1.0                 # Initial epsilon for exploration
-  epsilon_end: 0.01                  # Final epsilon for exploration
-  epsilon_decay: 0.995               # Epsilon decay rate
-  replay_buffer_size: 10000          # Experience replay buffer size
-  batch_size: 32                     # Training batch size
-  update_frequency: 100              # Model update frequency
-  use_prioritized_replay: true       # Use prioritized experience replay
-  model_save_path: "/tmp/orbit_planner/models" # Path for saving models
-
-# Performance Optimization Parameters
-performance:
-  enable_multi_threading: true       # Enable multi-threading
-  planning_thread_count: 2           # Number of planning threads
-  enable_caching: true               # Enable frontier caching
-  cache_duration: 5.0                # Cache duration in seconds
-  adaptive_update_rate: true         # Enable adaptive update rates
-  max_planning_time: 2.0             # Maximum planning time per cycle
-  enable_parallel_processing: true   # Enable parallel processing
-
-# Monitoring and Logging Parameters
-monitoring:
-  enable_performance_monitoring: true # Enable performance monitoring
-  enable_exploration_metrics: true   # Enable exploration metrics
-  metrics_publish_rate: 1.0          # Metrics publish rate in Hz
-  enable_visualization: true         # Enable visualization markers
-  visualization_rate: 2.0            # Visualization update rate in Hz
-  save_exploration_log: true         # Save exploration log
-  log_file_path: "/tmp/orbit_planner/logs" # Log file path
-
-# Debug Parameters
-debug:
-  enable_debug_output: false         # Enable debug output
-  log_level: "INFO"                  # Log level (DEBUG, INFO, WARN, ERROR)
-  save_exploration_data: false       # Save exploration data to files
-  data_save_path: "/tmp/orbit_planner" # Path for saving data
-  enable_profiling: false            # Enable performance profiling
-  profile_output_path: "/tmp/orbit_planner/profiles" # Profile output path
+# Voxblox parameters
+voxel_size: 0.1
+truncation_distance: 0.2
+max_weight: 100.0
+esdf_update_rate: 2.0
