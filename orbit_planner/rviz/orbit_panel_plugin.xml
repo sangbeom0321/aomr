@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<library path="lib/liborbit_panel_plugin">
+  <class name="orbit_planner/OrbitPanelPlugin" type="orbit_planner::OrbitPanelPlugin" base_class_type="rviz_common::Panel">
+    <description>
+      A panel plugin for controlling the Orbit Planner exploration system.
+      This panel provides a graphical user interface for defining exploration areas,
+      setting start positions, and monitoring exploration progress.
+    </description>
+  </class>
+</library>
